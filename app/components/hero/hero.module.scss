@@ -1,0 +1,29 @@
+.hero {
+    background: #F5F6F9;
+    min-height: 100vh;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.decor {
+    position: relative;
+}
+
+.block1 {
+    position: absolute;
+    left: -132px;
+    top: 100px;
+}
+
+.block2 {
+    position: absolute;
+    right: -53px;
+}
+
+.block3 {
+    position: absolute;
+    right: -50px;
+    bottom: 50px;
+}
