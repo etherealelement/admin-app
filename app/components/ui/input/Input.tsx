@@ -4,16 +4,16 @@ import styles from "./Input.module.scss";
 import cn from "classnames";
 import React from "react";
 
-export const Input: FC<InputProps> = React.memo(function Input({
-	value,
+
+export const Input = React.forwardRef(function Input({
 	type,
 	className,
 	size,
     placeholder,
 	...props
-}: InputProps): JSX.Element {
+}: InputProps, ref): JSX.Element {
 	return (
-		<div className={styles.wrapper} {...props}>
+		<div className={styles.wrapper}>
 			{type === "job" && (
 				<span className={styles.jobIcon}>
 					<svg
@@ -33,13 +33,15 @@ export const Input: FC<InputProps> = React.memo(function Input({
 				</span>
 			)}
 			<input
-				type={type}
+				
 				className={cn(styles.input, className, {
 					[styles.large]: size === "large",
 					[styles.medium]: size === "medium",
 					[styles.small]: size === "small",
 				})}
                 placeholder={placeholder}
+				ref = {ref}
+				{...props}
             />
 		</div>
 	);
