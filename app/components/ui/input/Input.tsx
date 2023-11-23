@@ -42,6 +42,7 @@ export const Input = React.forwardRef(function Input({
                 placeholder={placeholder}
 				ref = {ref}
 				{...props}
+				type={type}
             />
 		</div>
 	);
