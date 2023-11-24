@@ -1,0 +1,30 @@
+.km {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color:  #9195A4;
+text-align: center;
+font-size: 12px;
+font-weight: 600;
+line-height: 24px; 
+width: 32px;
+height: 32px;
+border-radius: 6px;
+border: 1px solid #E7E8EF;
+background:  #F5F6F9;
+}
+
+.count {
+    display: flex;
+width: 80px;
+height: 32px;
+justify-content: center;
+align-items: center;
+color:  #3626A7;
+text-align: center;
+font-size: 14px;
+font-weight: 600;
+line-height: 24px;
+border-radius: 26px;
+background: rgba(54, 38, 167, 0.10);
+}
