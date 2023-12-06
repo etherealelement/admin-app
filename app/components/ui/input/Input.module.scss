@@ -1,3 +1,7 @@
+.wrapper {
+    position: relative;
+}
+
 .input {
 	border-radius: 8px;
 	border: 1px solid #ebebed;
@@ -14,6 +18,9 @@
     }
 }
 
+
+
+
 .small {
     width: 204px;
     padding-left: 36px;
@@ -26,8 +33,8 @@
 .jobIcon {
     width: 20px;
     height: 20px;
-    top: 21px;
-    left: 18px;
+    top: 22px;
+    left: 12px;
     position: absolute;
     z-index: 2;
 }
