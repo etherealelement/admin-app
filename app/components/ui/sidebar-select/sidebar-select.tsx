@@ -8,9 +8,15 @@ import {
   MenuItem,
   Select,
   SelectChangeEvent,
-  makeStyles,
+    withStyles,
+
 } from '@mui/material';
+
 import { SidebarSelectProps } from './sidebar-select.props';
+
+// custom styles
+
+
 
 export const SidebarSelect: FC<SidebarSelectProps> = ({
   name,
@@ -26,14 +32,13 @@ export const SidebarSelect: FC<SidebarSelectProps> = ({
       <FormControl sx={{ width: 204, marginTop: 1 }} size="small">
         <InputLabel>{name}</InputLabel>
         <Select
-          sx={{
-            '.MuiOutlinedInput-notchedOutline': {
-              borderColor: '#E7E8EF',
-            },
-            '& label': {
-              fontSize: '10px',
-            },
-          }}
+            styles={{
+              ...styles,
+              control: base => ({
+                ...base,
+                boxShadow: `0 0 0 1px 'orange'`,
+              }),
+            }}
           labelId="input-select"
           id="input-select-id"
           value={locationName}
