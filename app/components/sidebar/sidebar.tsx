@@ -1,9 +1,9 @@
 import { FC } from 'react';
 import styles from './sidebar.module.scss';
-import cn from 'classnames';
 import { FilterLabel } from '../ui/filter-label/filter-label';
-import { Input } from '../ui/input/Input';
 import { SidebarSelect } from '../ui/sidebar-select/sidebar-select';
+import {Box, TextField} from "@mui/material";
+import {SidebarInput} from "@/app/components/ui/sidebar-input/sidebar-input";
 
 export const Sidebar: FC = (): JSX.Element => {
   return (
@@ -22,13 +22,7 @@ export const Sidebar: FC = (): JSX.Element => {
             >
               Job title
             </FilterLabel>
-            <Input
-              type="job"
-              placeholder="Search by job title"
-              size="small"
-              className={styles.sidebarInnerListItemInput}
-              style={{ width: 162 }}
-            ></Input>
+            <SidebarInput></SidebarInput>
           </li>
           <li className={styles.sidebarInnerListItem}>
             <FilterLabel
