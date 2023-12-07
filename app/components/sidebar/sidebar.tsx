@@ -2,7 +2,6 @@ import { FC } from 'react';
 import styles from './sidebar.module.scss';
 import { FilterLabel } from '../ui/filter-label/filter-label';
 import { SidebarSelect } from '../ui/sidebar-select/sidebar-select';
-import {Box, TextField} from "@mui/material";
 import {SidebarInput} from "@/app/components/ui/sidebar-input/sidebar-input";
 
 export const Sidebar: FC = (): JSX.Element => {
