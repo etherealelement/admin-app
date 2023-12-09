@@ -1,73 +1,162 @@
 "use client";
-import {FC, useState} from 'react';
+import {FC, useContext, useEffect, useRef, useState} from 'react';
 import React from "react";
-import {Table, Typography} from "antd";
-import type {ColumnsType, ColumnType, TableProps} from "antd/es/table";
-import {DashboardProps, DataType} from "@/app/components/dashboard/dashboard.props";
+import {Table, Typography, Form, Input, Popconfirm, Button} from "antd";
+import "./dashboard.scss";
+import {ColumnTypes, DashboardProps, DataType, EditableCellProps} from "@/app/components/dashboard/dashboard.props";
 import {useGetUsersQuery} from "@/app/redux";
-
-
-const columns: ColumnsType<DataType> = [
-    {
-        title: 'Full name',
-        dataIndex: 'name',
-        key: 'id',
-        sorter: (a, b) => a.name.length - b.username.length,
-        render: (text) => <Typography.Text copyable>{text}</Typography.Text>
-    },
-    {
-        title: 'User name',
-        dataIndex: 'username',
-        key: 'id',
-        sorter: (a, b) => a.username.length - b.username.length,
-    },
-    {
-        title: 'E-mail',
-        dataIndex: 'email',
-        key: 'id',
-        sorter: (a, b) => a.email.length - b.email.length,
-        render: (text) => <Typography.Text copyable>{text}</Typography.Text>
-    },
-    {
-        title: 'Website',
-        dataIndex: 'website',
-        key: 'id',
-        sorter: (a, b) => a.name.length - b.name.length,
-        render: text => <a href={text}>{text}</a>
-    },
-
-    {
-        title: 'company',
-        dataIndex: ['company', "name"],
-        key: 'id',
-    },
-    {
-        title: 'Phone',
-        dataIndex: 'phone',
-        key: 'id',
-        sorter: (a, b) => a.name.length - b.name.length,
-    },
-    {
-        title: 'Location',
-        dataIndex: ['address','city'],
-        key: 'id',
-        sorter: (a, b) => a.email.length - b.email.length,
-        render: (text) => <Typography.Text copyable>{text}</Typography.Text>
-    },
-];
-
-
-const onChange: TableProps<DataType>['onChange'] = (pagination, filters, sorter, extra) => {
-
-    console.log('params', pagination, filters, sorter, extra);
-};
+import {EditableRow} from "@/app/components/dashboard/editable/editable-row";
+import {EditableCell} from "@/app/components/dashboard/editable/editable-cell";
+// editable cell props
 
 export const Dashboard: FC<DashboardProps> = () => {
     const {data, isLoading} = useGetUsersQuery();
+    const [dataState, stateDataState] = useState<DataType[]>(data);
 
-    const dataSource = data.map(item => ({...item, key: item.id}));
 
-    return <Table columns={columns}
-                  dataSource={dataSource}
-                  onChange={onChange}/>;
+    const dataSource = dataState.map(item => ({...item, key: item.id}));
+    const [count, setCount] = useState(2);
+    const columns: (ColumnTypes[number] & { editable?: boolean; dataIndex: any })[] = [
+        {
+            title: 'Full name',
+            dataIndex: 'name',
+            key: 'id',
+            width: '30%',
+            editable: true,
+            sorter: (a, b) => a.name.length - b.username.length,
+            render: (text) => <Typography.Text copyable>{text}</Typography.Text>
+        },
+        {
+            title: 'User name',
+            dataIndex: 'username',
+            editable: true,
+            key: 'id',
+            sorter: (a, b) => a.username.length - b.username.length,
+            render: (text) => <Typography.Text copyable>{text}</Typography.Text>
+        },
+        {
+            title: 'E-mail',
+            dataIndex: 'email',
+            key: 'id',
+            sorter: (a, b) => a.email.length - b.email.length,
+            render: (text) => <Typography.Text copyable>{text}</Typography.Text>
+        },
+        {
+            title: 'Website',
+            dataIndex: 'website',
+            key: 'id',
+            sorter: (a, b) => a.name.length - b.name.length,
+            render: text => <a href={text}>{text}</a>
+        },
+
+        {
+            title: 'company',
+            dataIndex: ['company', "name"],
+            editable: true,
+            key: 'id',
+        },
+        {
+            title: 'Phone',
+            dataIndex: 'phone',
+            key: 'id',
+            editable: true,
+            sorter: (a, b) => a.name.length - b.name.length,
+        },
+        {
+            title: 'Location',
+            dataIndex: ['address','city'],
+            editable: true,
+            key: 'id',
+            sorter: (a, b) => a.email.length - b.email.length,
+            render: (text) => <Typography.Text copyable>{text}</Typography.Text>
+        },
+        {
+            title: 'operation',
+            dataIndex: 'operation',
+            render: (_, record: { key: React.Key }) =>
+                dataSource.length >= 1 ? (
+                    <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.key)}>
+                        <a>Delete</a>
+                    </Popconfirm>
+                ) : null,
+        },
+    ];
+
+    const handleDelete = (id: React.Key) => {
+        const newData = dataSource.filter((item) => item.id !== id);
+        stateDataState(newData);
+    };
+
+    const handleSave = (row: DataType) => {
+        const newData = [...dataSource];
+        const index = newData.findIndex((item) => row.id === item.id);
+        const item = newData[index];
+        newData.splice(index, 1, {
+            ...item,
+            ...row,
+        });
+        stateDataState(newData);
+    };
+
+
+    const components = {
+        body: {
+            row: EditableRow,
+            cell: EditableCell,
+        },
+    };
+
+    const defaultColumns = columns.map((col) => {
+        if (!col.editable) {
+            return col;
+        }
+        return {
+            ...col,
+            onCell: (record: DataType) => ({
+                record,
+                editable: col.editable,
+                dataIndex: col.dataIndex,
+                title: col.title,
+                handleSave,
+            }),
+        };
+    });
+
+
+    const handleAdd = () => {
+        const newData: DataType = {
+            id: count,
+            name: "",
+            username: "",
+            company: {
+                name: "",
+            },
+            email: "",
+            website: "",
+            phone: "",
+            address: {
+                city: "",
+            },
+
+        };
+        stateDataState([...dataSource, newData]);
+        setCount(count + 1);
+    };
+
+
+    return (
+        <div>
+            <Button onClick={handleAdd} type="primary" style={{ marginBottom: 16 }}>
+                Add new user
+            </Button>
+            <Table
+                components={components}
+                rowClassName={() => 'editable-row'}
+                bordered
+                size={"middle"}
+                dataSource={dataSource}
+                columns={defaultColumns as ColumnTypes}
+            />
+        </div>
+    )
 }
