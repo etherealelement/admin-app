@@ -1,7 +1,7 @@
 "use client";
 import {FC, useContext, useEffect, useRef, useState} from 'react';
 import React from "react";
-import {Table, Typography, Form, Input, Popconfirm, Button} from "antd";
+import {Table, Typography, Form, Input, Popconfirm, Button, Pagination} from "antd";
 import "./dashboard.scss";
 import {ColumnTypes, DashboardProps, DataType, EditableCellProps} from "@/app/components/dashboard/dashboard.props";
 import {useGetUsersQuery} from "@/app/redux";
@@ -143,6 +143,12 @@ export const Dashboard: FC<DashboardProps> = () => {
         setCount(count + 1);
     };
 
+    const [currentPage, setCurrentPage] = useState(1);
+    const pageSize = 10;
+
+    const handleChangePage = (page) => {
+        setCurrentPage(page);
+    };
 
     return (
         <div>
@@ -154,9 +160,18 @@ export const Dashboard: FC<DashboardProps> = () => {
                 rowClassName={() => 'editable-row'}
                 bordered
                 size={"middle"}
+                pagination={false}
                 dataSource={dataSource}
                 columns={defaultColumns as ColumnTypes}
             />
+            <Pagination
+                current={currentPage}
+                pageSize={pageSize}
+                total={data.length} // Общее количество строк в таблице
+                onChange={handleChangePage}
+                style={{ marginTop: '16px' }} // Добавляет отступ сверху пагинации
+            />
+
         </div>
     )
 }
