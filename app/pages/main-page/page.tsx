@@ -7,7 +7,7 @@ import {Dashboard} from "@/app/components/dashboard/dashboard";
 import {useGetUsersQuery} from "@/app/redux";
 import {Spinner} from "@/app/components/ui/spinner/spinner";
 
-export const MainPage: FC = () => {
+ const MainPage: FC = () => {
 
     const {data = [], isLoading} = useGetUsersQuery()
 
@@ -28,3 +28,5 @@ export const MainPage: FC = () => {
         </div>
     </div>;
 };
+
+ export default MainPage
