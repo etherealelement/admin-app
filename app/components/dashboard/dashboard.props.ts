@@ -7,7 +7,7 @@ export interface DashboardProps extends  DetailedHTMLProps<HTMLAttributes<HTMLDi
 
 
 export interface DataType {
-    id: number,
+    id: number | string,
     name: string;
     username: string;
     email: string;

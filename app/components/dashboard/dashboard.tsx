@@ -1,21 +1,76 @@
 "use client";
 import {FC, useContext, useEffect, useRef, useState} from 'react';
 import React from "react";
-import {Table, Typography, Form, Input, Popconfirm, Button, Pagination} from "antd";
+import {Table, Typography, Form, Input, Popconfirm, Button} from "antd";
 import "./dashboard.scss";
-import {ColumnTypes, DashboardProps, DataType, EditableCellProps} from "@/app/components/dashboard/dashboard.props";
-import {useGetUsersQuery} from "@/app/redux";
+import {ColumnTypes, DashboardProps, DataType} from "@/app/components/dashboard/dashboard.props";
+import {useGetUsersQuery, useAddUserMutation, useDeleteUserMutation} from "@/app/redux";
 import {EditableRow} from "@/app/components/dashboard/editable/editable-row";
 import {EditableCell} from "@/app/components/dashboard/editable/editable-cell";
-// editable cell props
+
 
 export const Dashboard: FC<DashboardProps> = () => {
+    // rtk hooks
     const {data, isLoading} = useGetUsersQuery();
+    const [addUser, {isError}] = useAddUserMutation()
+    const [deleteProduct] = useDeleteUserMutation()
+
     const [dataState, stateDataState] = useState<DataType[]>(data);
-
-
     const dataSource = dataState.map(item => ({...item, key: item.id}));
-    const [count, setCount] = useState(2);
+    const [count, setCount] = useState(11);
+    const [newUserData, setNewUserData] = useState<DataType>()
+
+
+    const handleAddUser = async (dataState: DataType) => {
+        if (newUserData) {
+            await addUser(newUserData).unwrap();
+        }
+    }
+
+
+    const handleDelete = (id: React.Key) => {
+        const newData = dataSource.filter((item) => item.id !== id);
+        deleteProduct(id);
+        stateDataState(newData);
+    };
+    const handleSave = (row: DataType) => {
+        const newData = [...dataSource];
+        const index = newData.findIndex((item) => row.id === item.id);
+        const item = newData[index];
+        newData.splice(index, 1, {
+            ...item,
+            ...row,
+        });
+        setNewUserData(item);
+        stateDataState(newData);
+    };
+    const components = {
+        body: {
+            row: EditableRow,
+            cell: EditableCell,
+        },
+    };
+
+
+    const handleAdd = () => {
+        const newData: DataType = {
+            id: count,
+            name: ``,
+            username: "",
+            company: {
+                name: "",
+            },
+            email: "",
+            website: "",
+            phone: "",
+            address: {
+                city: "",
+            },
+
+        };
+        stateDataState([...dataSource, newData]);
+        setCount((e) => e + 1);
+    };
     const columns: (ColumnTypes[number] & { editable?: boolean; dataIndex: any })[] = [
         {
             title: 'Full name',
@@ -71,7 +126,17 @@ export const Dashboard: FC<DashboardProps> = () => {
             render: (text) => <Typography.Text copyable>{text}</Typography.Text>
         },
         {
-            title: 'operation',
+            title: 'save',
+            dataIndex: 'operation',
+            render: (_, record: { key: React.Key }) =>
+                dataSource.length >= 1 ? (
+                    <Popconfirm title="Sure to save?" onConfirm={handleAddUser}>
+                        <a>Save</a>
+                    </Popconfirm>
+                ) : null,
+        },
+        {
+            title: 'delete',
             dataIndex: 'operation',
             render: (_, record: { key: React.Key }) =>
                 dataSource.length >= 1 ? (
@@ -81,31 +146,6 @@ export const Dashboard: FC<DashboardProps> = () => {
                 ) : null,
         },
     ];
-
-    const handleDelete = (id: React.Key) => {
-        const newData = dataSource.filter((item) => item.id !== id);
-        stateDataState(newData);
-    };
-
-    const handleSave = (row: DataType) => {
-        const newData = [...dataSource];
-        const index = newData.findIndex((item) => row.id === item.id);
-        const item = newData[index];
-        newData.splice(index, 1, {
-            ...item,
-            ...row,
-        });
-        stateDataState(newData);
-    };
-
-
-    const components = {
-        body: {
-            row: EditableRow,
-            cell: EditableCell,
-        },
-    };
-
     const defaultColumns = columns.map((col) => {
         if (!col.editable) {
             return col;
@@ -121,35 +161,6 @@ export const Dashboard: FC<DashboardProps> = () => {
             }),
         };
     });
-
-
-    const handleAdd = () => {
-        const newData: DataType = {
-            id: count,
-            name: "",
-            username: "",
-            company: {
-                name: "",
-            },
-            email: "",
-            website: "",
-            phone: "",
-            address: {
-                city: "",
-            },
-
-        };
-        stateDataState([...dataSource, newData]);
-        setCount(count + 1);
-    };
-
-    const [currentPage, setCurrentPage] = useState(1);
-    const pageSize = 10;
-
-    const handleChangePage = (page) => {
-        setCurrentPage(page);
-    };
-
     return (
         <div>
             <Button onClick={handleAdd} type="primary" style={{ marginBottom: 16 }}>
@@ -160,16 +171,8 @@ export const Dashboard: FC<DashboardProps> = () => {
                 rowClassName={() => 'editable-row'}
                 bordered
                 size={"middle"}
-                pagination={false}
                 dataSource={dataSource}
                 columns={defaultColumns as ColumnTypes}
-            />
-            <Pagination
-                current={currentPage}
-                pageSize={pageSize}
-                total={data.length} // Общее количество строк в таблице
-                onChange={handleChangePage}
-                style={{ marginTop: '16px' }} // Добавляет отступ сверху пагинации
             />
 
         </div>
