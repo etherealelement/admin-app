@@ -4,7 +4,8 @@ import { Tag } from '../ui/tag/tag';
 import {useGetUsersQuery} from "@/app/redux";
 
 export const AppHeader: FC = (): JSX.Element => {
-    const {data = [], isLoading} = useGetUsersQuery()
+    const {data = [], isLoading} = useGetUsersQuery();
+
   return (
     <header className={styles.header}>
       <div className={styles.headerInner}>

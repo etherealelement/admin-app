@@ -1,7 +1,8 @@
 "use client";
 import {ChangeEvent, FC, FormEvent, useState} from 'react';
 import {Box, TextField} from "@mui/material";
-export const SidebarInput: FC = () => {
+import {SidebarInputProps} from "@/app/components/ui/sidebar-input/sidebar-input.props";
+export const SidebarInput: FC<SidebarInputProps> = ({name}: SidebarInputProps) => {
     const [dataValue, setDataValue] = useState<string>("");
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -15,7 +16,7 @@ export const SidebarInput: FC = () => {
             }}
         >
             <TextField id="outlined-basic"
-                       label="Search by job title"
+                       label={name}
                        variant="outlined"
                        size={"small"}
                        value={dataValue}

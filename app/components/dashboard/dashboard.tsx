@@ -47,6 +47,13 @@ const columns: ColumnsType<DataType> = [
         key: 'id',
         sorter: (a, b) => a.name.length - b.name.length,
     },
+    {
+        title: 'Location',
+        dataIndex: ['address','city'],
+        key: 'id',
+        sorter: (a, b) => a.email.length - b.email.length,
+        render: (text) => <Typography.Text copyable>{text}</Typography.Text>
+    },
 ];
 
 

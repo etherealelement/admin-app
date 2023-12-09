@@ -13,19 +13,20 @@ import {
 } from '@mui/material';
 
 import { SidebarSelectProps } from './sidebar-select.props';
-
-// custom styles
-
-
+import {log} from "node:util";
 
 export const SidebarSelect: FC<SidebarSelectProps> = ({
+    websiteData,
   name,
 }: SidebarSelectProps): JSX.Element => {
   const [locationName, setLocationName] = useState<string>('');
 
+
   const handleChange = (e: SelectChangeEvent) => {
     setLocationName(e.target.value);
   };
+
+
 
   return (
     <div className={styles.select}>
@@ -43,16 +44,15 @@ export const SidebarSelect: FC<SidebarSelectProps> = ({
           id="input-select-id"
           value={locationName}
           label={name}
-          onChange={handleChange}
+            onChange={handleChange}
         >
           <MenuItem value="">
             <em>None</em>
           </MenuItem>
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
+            {websiteData && websiteData.map(item => <MenuItem key={item.id} value={item.website} onClick={() => handleChange}>{item.website}</MenuItem>)}
         </Select>
       </FormControl>
     </div>
   );
 };
+
