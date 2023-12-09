@@ -1,15 +1,10 @@
-"use client";
-import {MainPage} from "@/app/pages/main-page/main-page";
-import {Provider} from "react-redux";
-import {store} from "./redux";
+import {Button} from "@/app/components/ui/button/button";
+import Link from "next/link";
 
-
-export default function Home() {
-  return (
-    <>
-         <Provider store={store}>
-             <MainPage></MainPage>
-         </Provider>
-    </>
-  );
-}
+export default function Home () {
+    return (
+        <Link href={"pages/auth-page"}>
+            <Button type={"login"}>Auth</Button>
+        </Link>
+    );
+};
