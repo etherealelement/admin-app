@@ -35,4 +35,4 @@ export const todosApi = createApi({
     })
 })
 
-export const {useGetUsersQuery, useAddUserMutation, useDeleteUserMutation, useFilterUserQuery} = todosApi
+export const {useGetUsersQuery, useAddUserMutation, useDeleteUserMutation} = todosApi
