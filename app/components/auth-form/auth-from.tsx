@@ -5,6 +5,7 @@ import styles from './auth-from.module.scss';
 import { Button } from '../ui/button/button';
 import { IForm } from './auth-from.props';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import Link from "next/link";
 export const AuthForm: FC = () => {
   const {
     register,
@@ -121,7 +122,9 @@ export const AuthForm: FC = () => {
           </div>
         </div>
 
-        <Button type="login">Login</Button>
+        <Link href={"main-page"}>
+          <Button type="login">Login</Button>
+        </Link>
       </div>
     </form>
   );

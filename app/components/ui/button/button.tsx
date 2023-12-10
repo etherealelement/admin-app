@@ -35,20 +35,20 @@ export const Button: FC<ButtonProps> = React.memo(function Button({
 								cy="6"
 								r="2"
 								stroke="white"
-								stroke-width="0.833333"
+								strokeWidth="0.833333"
 							/>
 							<circle
 								cx="8.49992"
 								cy="8.00001"
 								r="6.66667"
 								stroke="white"
-								stroke-width="0.833333"
+								strokeWidth="0.833333"
 							/>
 							<path
 								d="M12.4794 13.3333C12.3733 11.4057 11.7831 10 8.49997 10C5.21681 10 4.62661 11.4057 4.52051 13.3333"
 								stroke="white"
-								stroke-width="0.833333"
-								stroke-linecap="round"
+								strokeWidth="0.833333"
+								strokeLinecap="round"
 							/>
 						</svg>
 					)}

@@ -1,11 +1,15 @@
 import { FC } from 'react';
 import styles from './sidebar.module.scss';
-import cn from 'classnames';
 import { FilterLabel } from '../ui/filter-label/filter-label';
-import { Input } from '../ui/input/Input';
 import { SidebarSelect } from '../ui/sidebar-select/sidebar-select';
+import {SidebarInput} from "@/app/components/ui/sidebar-input/sidebar-input";
+import {useGetUsersQuery} from "@/app/redux";
 
 export const Sidebar: FC = (): JSX.Element => {
+
+  const {data, isLoading} = useGetUsersQuery();
+
+
   return (
     <div className={styles.sidebar}>
       <div className={styles.sidebarInner}>
@@ -17,36 +21,39 @@ export const Sidebar: FC = (): JSX.Element => {
         <ul className={styles.sidebarInnerList}>
           <li className={styles.sidebarInnerListItem}>
             <FilterLabel
-              type="job"
-              className={styles.sidebarInnerListItemLabel}
+                type="job"
+                className={styles.sidebarInnerListItemLabel}
             >
-              Job title
+              Full name
             </FilterLabel>
-            <Input
-              type="job"
-              placeholder="Search by job title"
-              size="small"
-              className={styles.sidebarInnerListItemInput}
-              style={{ width: 162 }}
-            ></Input>
+            <SidebarInput name={"Search by full name"}></SidebarInput>
           </li>
           <li className={styles.sidebarInnerListItem}>
             <FilterLabel
-              type="location"
-              className={styles.sidebarInnerListItemLabel}
+                type="location"
+                className={styles.sidebarInnerListItemLabel}
             >
               location
             </FilterLabel>
-            <SidebarSelect name="Choose location"></SidebarSelect>
+            <SidebarInput name={"Search by location"}></SidebarInput>
+          </li>
+          <li className={styles.sidebarInnerListItem}>
+            <FilterLabel
+                type="industry"
+                className={styles.sidebarInnerListItemLabel}
+            >
+              Company
+            </FilterLabel>
+            <SidebarInput name={"Search by company"}></SidebarInput>
           </li>
           <li className={styles.sidebarInnerListItemLast}>
             <FilterLabel
-              type="industry"
-              className={styles.sidebarInnerListItemLabel}
+                type="website"
+                className={styles.sidebarInnerListItemLabel}
             >
-              industry
+              Website
             </FilterLabel>
-            <SidebarSelect name="Choose industry"></SidebarSelect>
+            <SidebarSelect name="Choose website" websiteData={data}></SidebarSelect>
           </li>
         </ul>
       </div>
