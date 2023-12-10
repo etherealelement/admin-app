@@ -47,6 +47,12 @@ table {
 	border-spacing: 0;
 }
 
+.container {
+	padding-top: 38px;
+	max-width: 1216px;
+	margin: 0 auto;
+}
+
 
 
 /*.Mui-focused .MuiOutlinedInput-notchedOutline {*/

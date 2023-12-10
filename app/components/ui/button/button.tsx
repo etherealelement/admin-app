@@ -16,7 +16,8 @@ export const Button: FC<ButtonProps> = React.memo(function Button({
 				[styles.login]: type === "login",
 				[styles.user]: type === "user",
 				[styles.upgrade]: type === "upgrade",
-                [styles.plan]: type === "plan"
+                [styles.plan]: type === "plan",
+				[styles.signup]: type === 'signup',
 			})}
 			{...props}
 		>

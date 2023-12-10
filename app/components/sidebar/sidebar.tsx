@@ -4,6 +4,8 @@ import { FilterLabel } from '../ui/filter-label/filter-label';
 import { SidebarSelect } from '../ui/sidebar-select/sidebar-select';
 import {SidebarInput} from "@/app/components/ui/sidebar-input/sidebar-input";
 import {useGetUsersQuery} from "@/app/redux";
+import Link from "next/link";
+import {IconLogo} from "@/app/components/ui/icons/icon-logo";
 
 export const Sidebar: FC = (): JSX.Element => {
 
@@ -14,7 +16,7 @@ export const Sidebar: FC = (): JSX.Element => {
     <div className={styles.sidebar}>
       <div className={styles.sidebarInner}>
         <div className={styles.sidebarInnerBox}>
-          <h1 className={styles.sidebarInnerBoxLogo}>LOGO</h1>
+          <Link href={"/pages/main-page"} className={styles.sidebarInnerBoxLogo}><IconLogo></IconLogo></Link>
           <h2 className={styles.sidebarInnerBoxFilter}>Filters</h2>
         </div>
 
