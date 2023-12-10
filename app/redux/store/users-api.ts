@@ -27,21 +27,11 @@ export const todosApi = createApi({
         }),
         deleteUser: build.mutation({
             query: (id) => ({
-                url: `users/${id}`,
+                url: `/users?/${id}`,
                 method: "DELETE",
             }),
             invalidatesTags: [{type: "users", id: "LIST"}]
         }),
-        filterUser: build.query({
-            query: (search = "") => `users?${search && `name=${search}`}`,
-            providesTags: (result) =>
-                result
-                    ? [
-                        ...result.map(({id}) => ({type: 'users' as const, id})),
-                        {type: 'users', id: 'LIST'},
-                    ]
-                    : [{type: 'users', id: 'LIST'}],
-        })
     })
 })
 

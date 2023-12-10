@@ -23,6 +23,10 @@ export const Dashboard: FC<DashboardProps> = () => {
     const [newUserData, setNewUserData] = useState<DataType>()
 
 
+    useEffect(() => {
+        stateDataState(data)
+    }, [data]);
+
     const handleAddUser = async (dataState: DataType) => {
         if (newUserData) {
             await addUser(newUserData).unwrap();
@@ -172,7 +176,7 @@ export const Dashboard: FC<DashboardProps> = () => {
                 rowClassName={() => 'editable-row'}
                 bordered
                 size={"middle"}
-                dataSource={data}
+                dataSource={dataSource}
                 columns={defaultColumns as ColumnTypes}
             />
 
