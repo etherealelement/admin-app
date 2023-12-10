@@ -4,18 +4,20 @@ import React from "react";
 import {Table, Typography, Form, Input, Popconfirm, Button} from "antd";
 import "./dashboard.scss";
 import {ColumnTypes, DashboardProps, DataType} from "@/app/components/dashboard/dashboard.props";
-import {useGetUsersQuery, useAddUserMutation, useDeleteUserMutation} from "@/app/redux";
+import {useGetUsersQuery, useAddUserMutation, useDeleteUserMutation, useFilterUserQuery} from "@/app/redux";
 import {EditableRow} from "@/app/components/dashboard/editable/editable-row";
 import {EditableCell} from "@/app/components/dashboard/editable/editable-cell";
+import {InputSearchValueContext} from "@/app/pages/main-page/context/main-context";
 
 
 export const Dashboard: FC<DashboardProps> = () => {
     // rtk hooks
-    const {data, isLoading} = useGetUsersQuery();
+    const inputValue = useContext(InputSearchValueContext);
+    const {data = [], isLoading} = useGetUsersQuery(inputValue)
     const [addUser, {isError}] = useAddUserMutation()
     const [deleteProduct] = useDeleteUserMutation()
 
-    const [dataState, stateDataState] = useState<DataType[]>(data);
+    const [dataState, stateDataState] = useState<DataType[]>([]);
     const dataSource = dataState.map(item => ({...item, key: item.id}));
     const [count, setCount] = useState(11);
     const [newUserData, setNewUserData] = useState<DataType>()
@@ -50,8 +52,6 @@ export const Dashboard: FC<DashboardProps> = () => {
             cell: EditableCell,
         },
     };
-
-
     const handleAdd = () => {
         const newData: DataType = {
             id: count,
@@ -163,6 +163,7 @@ export const Dashboard: FC<DashboardProps> = () => {
     });
     return (
         <div>
+            {/*<input onChange={}></input>*/}
             <Button onClick={handleAdd} type="primary" style={{ marginBottom: 16 }}>
                 Add new user
             </Button>
@@ -171,7 +172,7 @@ export const Dashboard: FC<DashboardProps> = () => {
                 rowClassName={() => 'editable-row'}
                 bordered
                 size={"middle"}
-                dataSource={dataSource}
+                dataSource={data}
                 columns={defaultColumns as ColumnTypes}
             />
 

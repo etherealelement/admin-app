@@ -1,5 +1,5 @@
 'use client';
-import { FC, useState } from 'react';
+import {FC, useContext, useEffect, useState} from 'react';
 import cn from 'classnames';
 import styles from './sidebar-select.module.scss';
 import {
@@ -14,17 +14,23 @@ import {
 
 import { SidebarSelectProps } from './sidebar-select.props';
 import {log} from "node:util";
+import {InputSearchValueHandlerContext} from "@/app/pages/main-page/context/main-context";
 
 export const SidebarSelect: FC<SidebarSelectProps> = ({
     websiteData,
   name,
 }: SidebarSelectProps): JSX.Element => {
   const [locationName, setLocationName] = useState<string>('');
-
+  const setValueContext = useContext(InputSearchValueHandlerContext);
 
   const handleChange = (e: SelectChangeEvent) => {
     setLocationName(e.target.value);
   };
+
+    useEffect(() => {
+        setValueContext(locationName)
+    }, [locationName]);
+
 
 
 
