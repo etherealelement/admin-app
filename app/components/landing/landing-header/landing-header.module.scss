@@ -1,0 +1,48 @@
+.header {
+
+
+  &Inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    &Nav {
+
+
+      &List {
+        display: flex;
+        align-items: center;
+
+
+        &Item {
+          &:nth-child(1) {
+            margin-right: 48px;
+          }
+          &:nth-child(2) {
+            margin-right: 32px;
+          }
+          &Link {
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            color: #151515;
+            transition: all .3s;
+            &:hover {
+              color: rgba(119, 118, 118, 0.52);
+            }
+            &Active {
+              text-decoration: none;
+              color: #3626A7;
+              font-size: 16px;
+              font-weight: 600;
+              transition: all .3s;
+              &:hover {
+                color: #614be7;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
