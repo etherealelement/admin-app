@@ -1,24 +1,22 @@
-"use client";
-import type { Metadata } from 'next'
-import { Mulish } from 'next/font/google'
-import './globals.css'
-import {store} from "@/app/redux";
-import {Provider} from "react-redux";
+'use client';
+import type { Metadata } from 'next';
+import { Mulish, Anton } from 'next/font/google';
+import './globals.css';
+import { store } from '@/app/redux';
+import { Provider } from 'react-redux';
 
-const inter = Mulish({ subsets: ['latin'] })
-
-
+const inter = Mulish({ subsets: ['latin'] });
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
-      <Provider store={store}>
-        <html lang="en">
+    <Provider store={store}>
+      <html lang="en">
         <body className={inter.className}>{children}</body>
-        </html>
-      </Provider>
-  )
+      </html>
+    </Provider>
+  );
 }

@@ -1,0 +1,55 @@
+.hero {
+    background-image: url("/hero-bg.png");
+    background-size: 100%;
+    background-repeat: no-repeat;
+    background-position: center -253px;
+    margin-right: 70px;
+    margin-left: 70px;
+
+
+    &Inner {
+        margin-top: 170px;
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+
+        &Text {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            align-items: center;
+            &Title {
+                color: #151515;
+                font-size: 114px;
+                font-weight: 800;
+                line-height: 122px; 
+
+            }
+
+            &Sub {
+                color: #3626A7;
+            font-size: 114px;
+            line-height: 122px; 
+            font-weight: 800;
+            }
+        }
+        
+        &Description {
+            margin-top: 24px;
+            margin-bottom: 56px;
+            &Text {
+                color: #151515;
+text-align: center;
+text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+font-size: 18px;
+font-weight: 400;
+line-height: 28px; 
+            }
+        }
+
+        &Checkboxes {
+            margin-top: 24px;
+            transform: translateX(157px);
+        }
+    }
+}

@@ -1,0 +1,65 @@
+.wrapper {
+    position: relative;
+}
+
+.form {
+    display: flex;
+    justify-content: center;
+}
+
+.formInner {
+    width: fit-content;
+    height: 77px;
+}
+
+.button {
+    top: -13px;
+    right: 4px;
+    position: absolute;
+}
+
+.errors {
+    margin-left: 31px;
+    width: fit-content;
+}
+
+.errorMessage {
+    color: #C2473B;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 20px; 
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: all .3s;
+}
+
+.input {
+    width: 592px;
+    border-radius: 48px;
+    background: #FFF;
+    border: 1px solid #151515;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 32px;
+    transition: all .3s;
+    outline: none;
+    &:focus {
+        border: 1px solid  #3626A7;
+    }
+}
+
+.inputError {
+    border: 1px solid #C2473B;
+    &:focus {
+        border: 1px solid  #C2473B;
+    }
+}
+
+.errorButton {
+    background: gray;
+    &:hover {
+        background: gray;
+        cursor: not-allowed;
+    }
+}
