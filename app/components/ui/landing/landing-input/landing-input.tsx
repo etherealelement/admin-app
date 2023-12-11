@@ -1,10 +1,11 @@
 'use client';
-import { FC } from 'react';
+import {FC, useContext} from 'react';
 import { EmailForm, LandingInputProps } from './landing-input.props';
 import styles from './landing-input.module.scss';
 import { Button } from '../../button/button';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import cn from 'classnames';
+import {CheckboxContext} from "@/app/context/landing-context";
 
 export const LandingInput: FC<LandingInputProps> = ({
   placeholderText,
@@ -20,6 +21,8 @@ export const LandingInput: FC<LandingInputProps> = ({
     defaultValues: {},
     mode: 'onBlur',
   });
+
+  const checkboxValue = useContext(CheckboxContext)
 
   const SubmitHandler: SubmitHandler<EmailForm> = () => {
     reset();
@@ -74,6 +77,7 @@ export const LandingInput: FC<LandingInputProps> = ({
             type="signup"
             className={cn(styles.button, className, {
               [styles.errorButton]: errors.email,
+              [styles.errorButton]: !checkboxValue,
             })}
           >
             Sign up for free

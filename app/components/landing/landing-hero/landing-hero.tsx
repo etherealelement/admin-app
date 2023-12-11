@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { FC } from 'react';
 import styles from './landing-hero.module.scss';
 import { LandingInput } from '../../ui/landing/landing-input/landing-input';
@@ -6,6 +6,10 @@ import { LandingCheckbox } from '../../ui/landing/landing-checkbox/landing-check
 import '../../../globals.css';
 
 export const LandingHero: FC = (): JSX.Element => {
+
+
+
+
   return (
     <section className={styles.hero}>
       <div className="container">
