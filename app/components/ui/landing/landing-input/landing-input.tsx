@@ -1,5 +1,13 @@
 'use client';
-import { ChangeEvent, FC, useContext, useRef, useState } from 'react';
+import {
+  ChangeEvent,
+  FC,
+  use,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { EmailForm, LandingInputProps } from './landing-input.props';
 import styles from './landing-input.module.scss';
 import { Button } from '../../button/button';
@@ -9,6 +17,8 @@ import { CheckboxContext } from '@/app/context/landing-context';
 import emailjs from '@emailjs/browser';
 import { LoadingOutlined } from '@ant-design/icons';
 import { Spin } from 'antd';
+import Router, { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export const LandingInput: FC<LandingInputProps> = ({
   placeholderText,
@@ -35,7 +45,6 @@ export const LandingInput: FC<LandingInputProps> = ({
   const [formData, setFormData] = useState<string>('');
   const [formErrors, setFormErrors] = useState<string>('');
   const [spinned, setSpinned] = useState<boolean>(false);
-  const [inputValue, setInputValue] = useState<string>('');
   const form = useRef<HTMLFormElement>(null);
   const sendEmail = (e: any) => {
     e.preventDefault();
@@ -59,9 +68,17 @@ export const LandingInput: FC<LandingInputProps> = ({
       );
   };
 
-  const handleChangeInputValue = (e: ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
-  };
+  // redirect
+
+  const router = useRouter();
+
+  useEffect(() => {
+    if (formData) {
+      setTimeout(() => {
+        router.push('pages/auth-page');
+      }, 0);
+    }
+  }, [formData, router]);
 
   return (
     <form
