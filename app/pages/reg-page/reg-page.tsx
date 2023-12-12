@@ -1,5 +1,5 @@
 import { FC } from 'react';
 
-export const RegPage: FC = (): JSX.Element => {
+export const Page: FC = (): JSX.Element => {
   return <></>;
 };
