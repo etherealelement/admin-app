@@ -1,17 +1,21 @@
 'use client';
-import {FC, useContext} from 'react';
+import { ChangeEvent, FC, useContext, useRef, useState } from 'react';
 import { EmailForm, LandingInputProps } from './landing-input.props';
 import styles from './landing-input.module.scss';
 import { Button } from '../../button/button';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import cn from 'classnames';
-import {CheckboxContext} from "@/app/context/landing-context";
+import { CheckboxContext } from '@/app/context/landing-context';
+import emailjs from '@emailjs/browser';
+import { LoadingOutlined } from '@ant-design/icons';
+import { Spin } from 'antd';
 
 export const LandingInput: FC<LandingInputProps> = ({
   placeholderText,
   className,
   ...props
 }: LandingInputProps): JSX.Element => {
+  const checkboxValue = useContext(CheckboxContext);
   const {
     register,
     handleSubmit,
@@ -19,17 +23,57 @@ export const LandingInput: FC<LandingInputProps> = ({
     reset,
   } = useForm<EmailForm>({
     defaultValues: {},
-    mode: 'onBlur',
+    mode: 'onChange',
   });
-
-  const checkboxValue = useContext(CheckboxContext)
 
   const SubmitHandler: SubmitHandler<EmailForm> = () => {
     reset();
   };
 
+  // email js
+
+  const [formData, setFormData] = useState<string>('');
+  const [formErrors, setFormErrors] = useState<string>('');
+  const [spinned, setSpinned] = useState<boolean>(false);
+  const [inputValue, setInputValue] = useState<string>('');
+  const form = useRef<HTMLFormElement>(null);
+  const sendEmail = (e: any) => {
+    e.preventDefault();
+    emailjs
+      .sendForm(
+        'service_iwcwg32',
+        'template_xf4putg',
+        form.current,
+        'Z1tp-R_4MiXr-iQ9a'
+      )
+      .then(
+        (result) => {
+          if (result.text) {
+            setSpinned(false);
+            setFormData(result.text);
+          }
+        },
+        (error) => {
+          setFormErrors(error);
+        }
+      );
+  };
+
+  const handleChangeInputValue = (e: ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+  };
+
   return (
-    <form onSubmit={handleSubmit(SubmitHandler)} className={styles.form}>
+    <form
+      ref={form}
+      onSubmit={(e) => {
+        if (checkboxValue) {
+          sendEmail(e);
+          handleSubmit(SubmitHandler);
+        }
+      }}
+      className={styles.form}
+    >
       <div className={styles.formInner}>
         <div className={styles.errors}>
           {errors?.email && (
@@ -59,7 +103,9 @@ export const LandingInput: FC<LandingInputProps> = ({
             type="text"
             className={cn(styles.input, className, {
               [styles.inputError]: errors.email,
+              [styles.successInput]: formData.length > 0,
             })}
+            onSubmit={handleSubmit(SubmitHandler)}
             placeholder={placeholderText}
             {...register('email', {
               required: 'Field is required',
@@ -75,12 +121,19 @@ export const LandingInput: FC<LandingInputProps> = ({
           ></input>
           <Button
             type="signup"
+            onClick={() => setSpinned((e) => !e)}
             className={cn(styles.button, className, {
               [styles.errorButton]: errors.email,
               [styles.errorButton]: !checkboxValue,
+              [styles.successBtn]: formData.length > 0,
             })}
           >
-            Sign up for free
+            {!spinned ? 'Sign up for free' : 'Please wait...'}
+            {spinned && (
+              <Spin
+                indicator={<LoadingOutlined style={{ fontSize: 20 }} spin />}
+              />
+            )}
           </Button>
         </label>
       </div>
