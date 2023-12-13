@@ -5,4 +5,5 @@ export interface InputProps extends DetailedHTMLProps<HTMLAttributes<HTMLInputEl
     size: "large" | "medium" | "small";
     placeholder: string;
     ref: any;
+    nameField: string;
 }

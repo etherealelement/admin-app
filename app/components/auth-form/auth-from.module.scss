@@ -23,6 +23,17 @@
 	flex-direction: column;
 	gap: 24px;
 	margin-bottom: 108px;
+
+	&Button {
+		&Disable {
+			color: #EBEBED;
+			background: gray;
+			&:hover {
+				color: #EBEBED;
+				background: gray;
+			}
+		}
+	}
 }
 
 .inputTitle {

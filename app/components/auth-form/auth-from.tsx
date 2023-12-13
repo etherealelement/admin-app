@@ -1,26 +1,31 @@
 'use client';
-import {FC} from 'react';
+import {FC, useState} from 'react';
 import {Input} from '../ui/input/Input';
 import styles from './auth-from.module.scss';
 import {Button} from '../ui/button/button';
 import {IForm, IFormProps} from './auth-from.props';
 import {useForm, SubmitHandler} from 'react-hook-form';
 import Link from "next/link";
-
+import {FormErrorInterface} from "../../global-interfaces/formError.interface";
+import {isEmptyObject} from "@/app/helpers/functions/isEmptyObject";
+import isEmpty from "lodash/isEmpty";
+import {ButtonStatement} from "@/app/components/ui/button/button.props";
 export const AuthForm: FC<IFormProps> = ({titleForm, descriptionForm, className, type, ...props}: IFormProps) => {
     const {
         register,
         handleSubmit,
-        formState: {errors},
+        formState: {errors,isDirty,isValid},
         reset,
     } = useForm<IForm>({
         defaultValues: {},
-        mode: 'onBlur',
+        mode: 'onChange',
     });
 
-    const submit: SubmitHandler<IForm> = () => {
+
+    const submit: SubmitHandler<IForm> = (data) => {
         reset();
     };
+
 
     return (
         <form className={styles.form} onSubmit={handleSubmit(submit)} {...props}>
@@ -60,6 +65,7 @@ export const AuthForm: FC<IFormProps> = ({titleForm, descriptionForm, className,
                             </div>
                         </label>
                         <Input
+                            nameField={"email"}
                             type="email"
                             placeholder="Enter your email"
                             size="large"
@@ -106,6 +112,7 @@ export const AuthForm: FC<IFormProps> = ({titleForm, descriptionForm, className,
                         </label>
                         {/* password */}
                         <Input
+                            nameField={"password"}
                             type="password"
                             placeholder="Enter your password"
                             size="large"
@@ -119,8 +126,8 @@ export const AuthForm: FC<IFormProps> = ({titleForm, descriptionForm, className,
                         ></Input>
                     </div>
                 </div>
-                <Link href={"main-page"}>
-                    <Button type="login">Sign up</Button>
+                <Link href={isDirty && isValid && "main-page" || ""}>
+                    <Button type={isDirty && isValid && "login" || "disable"}>Sign up</Button>
                 </Link>
                 {type === "reg" && <div className={styles.policy}>
                     <p className={styles.policyText}>By signing up, I agree with</p>

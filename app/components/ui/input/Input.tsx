@@ -10,6 +10,7 @@ export const Input = React.forwardRef(function Input({
 	className,
 	size,
     placeholder,
+	nameField,
 	...props
 }: InputProps, ref): JSX.Element {
 	return (
@@ -33,7 +34,7 @@ export const Input = React.forwardRef(function Input({
 				</span>
 			)}
 			<input
-				
+				name={nameField}
 				className={cn(styles.input, className, {
 					[styles.large]: size === "large",
 					[styles.medium]: size === "medium",

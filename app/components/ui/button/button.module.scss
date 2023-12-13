@@ -69,3 +69,14 @@
     color: #EBEBED;
   }
 }
+
+.disable {
+  color: #ffffff;
+  background: gray;
+  cursor: not-allowed;
+  &:hover {
+    color: #ffffff;
+    background: gray;
+
+  }
+}
