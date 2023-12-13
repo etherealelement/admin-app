@@ -55,3 +55,17 @@
   width: 181px;
   position: relative;
 }
+
+.google {
+  border-radius: 8px;
+  border: 1px solid #EBEBED;
+  background: #FFF;
+  color: #151515;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  &:hover {
+    color: #EBEBED;
+  }
+}

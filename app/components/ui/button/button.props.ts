@@ -5,5 +5,5 @@ import { DetailedHTMLProps } from 'react';
 
 export interface ButtonProps extends DetailedHTMLProps<HTMLAttributes <HTMLButtonElement>, HTMLButtonElement> {
     children: ReactNode;
-    type: "login" | "user"| "upgrade" | "plan" | "signup";
+    type: "login" | "user"| "upgrade" | "plan" | "signup" | "google";
 }

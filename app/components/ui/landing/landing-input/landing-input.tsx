@@ -75,7 +75,7 @@ export const LandingInput: FC<LandingInputProps> = ({
   useEffect(() => {
     if (formData) {
       setTimeout(() => {
-        router.push('pages/auth-page');
+        router.push('pages/reg-page');
       }, 0);
     }
   }, [formData, router]);
