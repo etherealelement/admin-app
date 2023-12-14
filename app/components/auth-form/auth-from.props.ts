@@ -10,4 +10,8 @@ export interface IFormProps extends DetailedHTMLProps<HTMLAttributes<HTMLFormEle
     titleForm: string;
     descriptionForm: string;
     type: "reg" | "login";
+    buttonText: string;
+    buttonTextGoogle: string;
+    descriptionText: string;
+    descriptionLink: string;
 }

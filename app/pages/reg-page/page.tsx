@@ -11,6 +11,10 @@ import Image from "next/image";
              titleForm={"Sign Up to lorem ipsum"}
              descriptionForm={"Become a member - you’ll get free access to millions of contacts of potential customers. "}
              type={"reg"}
+             buttonTextGoogle={"Sign up with Google"}
+             descriptionText={"By signing up, I agree with"}
+             descriptionLink={"Terms & Conditions"}
+             buttonText={'Sign up'}
          ></AuthForm>
      </div>
        <div className={styles.regPageInnerRight}>
