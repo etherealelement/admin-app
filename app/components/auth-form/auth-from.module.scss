@@ -118,3 +118,15 @@
 		line-height: 22px;
 	}
 }
+
+.forgotPassword {
+	margin-top: 8px;
+	display: flex;
+	justify-content: flex-end;
+	&Link {
+		text-decoration: none;
+		color: #3626A7;
+		font-weight: 800;
+		font-size: 14px;
+	}
+}
