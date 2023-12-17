@@ -1,0 +1,46 @@
+.email {
+  margin-top: 62px;
+  &Inner {
+
+
+
+    &Block {
+      margin-top: 32px;
+
+      &Title {
+        color: #151515;
+        font-size: 32px;
+        font-weight: 800;
+        line-height: 40px;
+      }
+
+      &Text {
+        color: #151515;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 20px;
+      }
+    }
+
+
+    &Box {
+      margin-top: 48px;
+      border-radius: 14px;
+      background: rgba(54, 38, 167, 0.05);
+      padding: 24px;
+      width: 488px;
+      &Description {
+        padding-top: 16px;
+        max-width: 365px;
+      }
+
+      &Link {
+        text-decoration: none;
+        color: var(--Main, #3626A7);
+        font-size: 16px;
+        font-weight: 600;
+        line-height: 24px;
+      }
+    }
+  }
+}
