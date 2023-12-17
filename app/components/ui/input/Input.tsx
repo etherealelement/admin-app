@@ -3,7 +3,6 @@ import styles from "./Input.module.scss";
 import cn from "classnames";
 import React, {useEffect} from "react";
 import {useState} from "react";
-
 export const Input = React.forwardRef(function Input({
 	type,
 	className,
