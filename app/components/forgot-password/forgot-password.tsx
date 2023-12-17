@@ -84,7 +84,7 @@ export const ForgotPassword:FC<ForgotPasswordProps> = ({title,description,classN
                     ></Input>
                 </label>
                 <div>
-                   <Link href={isDirty && isValid && "/pages/check-email" || ""}>
+                   <Link href={isDirty && isValid && "/pages/email-page" || ""}>
                        <Button type={isDirty && isValid && "login" || "disable"}>Send instructions</Button>
                    </Link>
                 </div>

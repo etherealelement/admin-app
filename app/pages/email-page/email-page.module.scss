@@ -1,0 +1,25 @@
+.emailPage {
+
+
+  &Inner {
+    display: flex;
+    justify-content: space-between;
+
+
+    &Left {
+      display: grid;
+      justify-content: center;
+      flex-grow: 1;
+      height: 100vh;
+    }
+
+    &Right {
+      flex-grow: 0.4;
+      background: #F5F6F9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}
+
