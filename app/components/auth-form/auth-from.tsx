@@ -136,7 +136,7 @@ export const AuthForm: FC<IFormProps> = ({
                             })}
                         ></Input>
                         {type === "login" && <div className={styles.forgotPassword}>
-                            <Link href={"/"} className={styles.forgotPasswordLink}>Forgot password?</Link>
+                            <Link href={"/pages/forgot-password-page"} className={styles.forgotPasswordLink}>Forgot password?</Link>
                         </div>}
                     </div>
                 </div>
