@@ -12,7 +12,6 @@ import {
 
 
 export const CreateNewPassword:FC<CreateNewPasswordProps> = ({title,description,className,...props}: CreateNewPasswordProps) => {
-
     const {
         register,
         watch,
