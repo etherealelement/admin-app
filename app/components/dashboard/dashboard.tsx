@@ -10,9 +10,9 @@ import {
 } from '@/app/components/dashboard/dashboard.props';
 import {
   useGetUsersQuery,
-  useAddUserMutation,
   useDeleteUserMutation,
 } from '@/app/redux';
+import { useAddUserMutation } from '@/app/redux/store/register-api';
 import { EditableRow } from '@/app/components/dashboard/editable/editable-row';
 import { EditableCell } from '@/app/components/dashboard/editable/editable-cell';
 import { InputSearchValueContext } from '@/app/pages/main-page/context/main-context';

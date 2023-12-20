@@ -14,7 +14,7 @@ export const Input = React.forwardRef(function Input({
 
 	const [isVisible, setIsVisible] = useState<boolean>(true);
 
-	const isVisibleToggler = (type: "password" | "text" | "email" | "job") => {
+	const isVisibleToggler = (type: "password" | "text" | "email" | "job"| "tel") => {
 		switch (type) {
 			case "password": {
 				setIsVisible(false);
