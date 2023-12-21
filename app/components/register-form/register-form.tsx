@@ -358,6 +358,7 @@ export const RegisterForm: FC<IRegisterFormProps> = ({
           </div>
           <div className={styles.failContainer}>
             {result.error?.data.password}
+            {result.error?.data.username}
           </div>
         </div>
         <Button
