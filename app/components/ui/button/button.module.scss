@@ -49,3 +49,34 @@
     bottom: 9px;
     right: 72px;
 }
+
+.signup {
+  border-radius: 50px;
+  width: 181px;
+  position: relative;
+}
+
+.google {
+  border-radius: 8px;
+  border: 1px solid #EBEBED;
+  background: #FFF;
+  color: #151515;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  &:hover {
+    color: #EBEBED;
+  }
+}
+
+.disable {
+  color: #ffffff;
+  background: gray;
+  cursor: not-allowed;
+  &:hover {
+    color: #ffffff;
+    background: gray;
+
+  }
+}

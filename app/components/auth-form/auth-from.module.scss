@@ -9,10 +9,13 @@
 .formDescriptionText {
 	max-width: 357px;
 	font-size: 14px;
-	font-style: normal;
 	font-weight: 400;
 	line-height: 20px;
 	margin-bottom: 48px;
+
+	p{
+		max-width: 384px;
+	}
 }
 
 .inputBlock {
@@ -20,6 +23,17 @@
 	flex-direction: column;
 	gap: 24px;
 	margin-bottom: 108px;
+
+	&Button {
+		&Disable {
+			color: #EBEBED;
+			background: gray;
+			&:hover {
+				color: #EBEBED;
+				background: gray;
+			}
+		}
+	}
 }
 
 .inputTitle {
@@ -58,4 +72,66 @@
 
 .formDescription {
 	margin-bottom: 20px;
+}
+
+.policy {
+	padding-top: 58px;
+	display: flex;
+	gap: 5px;
+	max-width: 384px;
+	justify-content: center;
+
+	&Text {
+		font-size: 12px;
+		line-height: 20px;
+	}
+
+	&Link {
+		text-decoration: none;
+		color: #3626A7;
+		font-size: 12px;
+		line-height: 20px;
+	}
+}
+
+.decor {
+	display: inline-block;
+	margin-top: 32px;
+	margin-bottom: 32px;
+}
+
+.already {
+	margin-top: 60 + 96px;
+	display: flex;
+	gap: 3px;
+	justify-content: center;
+	max-width: 385px;
+	&Text {
+		font-size: 14px;
+		line-height: 22px;
+	}
+
+	&Login {
+		text-decoration: none;
+		color: var(--Main, #3626A7);
+		font-weight: 600;
+		line-height: 22px;
+	}
+}
+
+.forgotPassword {
+	margin-top: 8px;
+	display: flex;
+	justify-content: flex-end;
+	&Link {
+		text-decoration: none;
+		color: #3626A7;
+		font-weight: 800;
+		font-size: 14px;
+	}
+}
+
+.failContainer {
+    color: red;
+    font-size: 12px;
 }

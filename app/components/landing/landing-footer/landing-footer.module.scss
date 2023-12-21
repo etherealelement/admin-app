@@ -1,0 +1,47 @@
+.footer {
+  margin-top: 134px;
+
+  &Inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    &Left {
+      max-width: 499px;
+      &Text {
+        color: #151515;
+        font-size: 44px;
+        font-weight: 800;
+        line-height: 48px;
+      }
+    }
+
+    &List {
+      display: flex;
+      gap: 16px;
+
+      &Item {
+        border-radius: 32px;
+        border: 1px solid #F0EFF3;
+        background: #FFF;
+
+        &Wrap {
+          padding: 70px 72px 16px 24px;
+        }
+      }
+    }
+  }
+}
+
+.text1 {
+  color: var(--Main, #3626A7);
+  font-size: 48px;
+  font-weight: 800;
+  line-height: 56px;
+}
+
+.text2 {
+  color: #151515;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 26px
+}
