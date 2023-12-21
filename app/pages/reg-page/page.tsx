@@ -34,5 +34,6 @@ const RegPage: FC = (): JSX.Element => {
     </section>
   );
 };
-
 export default RegPage;
+
+
