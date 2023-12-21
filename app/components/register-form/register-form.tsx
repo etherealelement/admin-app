@@ -15,6 +15,26 @@ import { LoadingOutlined } from '@ant-design/icons';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
+const formConfig = (register) => ({
+  first_name: {
+    nameField: 'first_name',
+    type: 'email',
+    placeholder: 'Enter your first name',
+    size: 'large',
+    ...register('first_name', {
+      required: 'Field is required',
+      minLength: {
+        value: 5,
+        message: 'No less 5 symbols',
+      },
+      pattern: {
+        value: /^[a-zA-Z][a-zA-Z0-9]{2,15}$/,
+        message: 'Wrong fist name format',
+      },
+    }),
+  },
+});
+
 export const RegisterForm: FC<IRegisterFormProps> = ({
   titleForm,
   descriptionForm,
@@ -190,23 +210,7 @@ export const RegisterForm: FC<IRegisterFormProps> = ({
                 )}
               </div>
             </label>
-            <Input
-              nameField={'first_name'}
-              type="email"
-              placeholder="Enter your first name"
-              size="large"
-              {...register('first_name', {
-                required: 'Field is required',
-                minLength: {
-                  value: 5,
-                  message: 'No less 5 symbols',
-                },
-                pattern: {
-                  value: /^[a-zA-Z][a-zA-Z0-9]{2,15}$/,
-                  message: 'Wrong fist name format',
-                },
-              })}
-            ></Input>
+            <Input {...formConfig.first_name} />
           </div>
 
           {/* last_name */}
@@ -304,8 +308,6 @@ export const RegisterForm: FC<IRegisterFormProps> = ({
               })}
             ></Input>
           </div>
-
-          {/* password */}
 
           <div className={styles.inputBlockPassword}>
             <label className={styles.inputTitle}>
