@@ -14,111 +14,7 @@ import { Spin } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-
-const formConfig = (register: any) => ({
-  "email": {
-    nameField: 'email',
-    type: 'email',
-    placeholder: 'Enter your email',
-    size: 'large',
-    ...register('email', {
-      required: 'Field is required',
-      minLength: {
-        value: 5,
-        message: 'No less 5 symbols',
-      },
-      pattern: {
-        value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-        message: 'Wrong email format',
-      },
-    }),
-  }, 
-
-  "username": {
-    nameField: 'username',
-    type: 'text',
-    placeholder: 'Enter your email',
-    size: 'large',
-    ...register('username', {
-      required: 'Field is required',
-      minLength: {
-        value: 5,
-        message: 'No less 5 symbols',
-      },
-    }),
-  }, 
-
-  "phone": {
-    "nameField": 'phone',
-    "type": "tel",
-    "placeholder": "Enter your last name",
-    "size": "large",
-    ...register('phone', {
-      required: 'Field is required',
-      minLength: {
-        value: 5,
-        message: 'No less 5 symbols',
-      },
-      pattern: {
-        value: /^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/,
-        message: 'Wrong phone format',
-      },
-    }),
-  },
-
-  "last_name": {
-    "nameField": "last_name",
-    "type": "text",
-    "placeholder":"Enter your last name",
-    "size": "large",
-    ...register('last_name', {
-      required: 'Field is required',
-      minLength: {
-        value: 5,
-        message: 'No less 5 symbols',
-      },
-      pattern: {
-        value: /^[a-zA-Z][a-zA-Z0-9]{2,15}$/,
-        message: 'Wrong last name format',
-      },
-    })
-  },
-
-  
-
-  "first_name": {
-    nameField: 'first_name',
-    type: 'email',
-    placeholder: 'Enter your first name',
-    size: 'large',
-    ...register('first_name', {
-      required: 'Field is required',
-      minLength: {
-        value: 5,
-        message: 'No less 5 symbols',
-      },
-      pattern: {
-        value: /^[a-zA-Z][a-zA-Z0-9]{2,15}$/,
-        message: 'Wrong fist name format',
-      },
-    }),
-  },
-
-  "password": {
-    nameField: 'password',
-    type:"password",
-              placeholder: "Enter your password",
-              size: "large",
-              ...register('password', {
-                required: 'Field is required',
-                minLength: {
-                  value: 5,
-                  message: 'No less 5 symbols',
-                },
-              }),
-  }
-  
-});
+import { RegisterFormInput } from './register-form-input/register-form-input';
 
 export const RegisterForm: FC<IRegisterFormProps> = ({
   titleForm,
@@ -141,6 +37,8 @@ export const RegisterForm: FC<IRegisterFormProps> = ({
     defaultValues: {},
     mode: 'onChange',
   });
+
+  console.log(errors);
 
   const [CreateUseMutation, result] = useAddUserMutation<ResponseRegisterApi>();
 
@@ -165,6 +63,14 @@ export const RegisterForm: FC<IRegisterFormProps> = ({
     }
   }, [result, router]);
 
+  const formConfigObjects = [
+    {
+      name: 'Email',
+      configType: 'email',
+      errors: errors.email,
+    },
+  ];
+
   return (
     <form className={styles.form} onSubmit={handleSubmit(submit)} {...props}>
       <div className={styles.formDescription}>
@@ -175,38 +81,73 @@ export const RegisterForm: FC<IRegisterFormProps> = ({
       </div>
       <div className={styles.formInner}>
         <div className={styles.inputBlock}>
-          {/* email */}
+          {/* inputs */}
+          <RegisterFormInput
+            labelName="Email"
+            configType="email"
+            errors={errors.email}
+            fieldNameInput="Enter your email"
+            placeholderName="Enter your email"
+            register={register}
+            sizeInput="large"
+            typeInput="email"
+          ></RegisterFormInput>
 
-          <div className={styles.inputBlockEmail}>
-            <label className={styles.inputTitle}>
-              Email
-              <div className={styles.errors}>
-                {errors?.email && (
-                  <div className={styles.errorMessage}>
-                    <span>
-                      <svg
-                        width="14"
-                        height="12"
-                        viewBox="0 0 14 12"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          clipRule="evenodd"
-                          d="M8.6515 0.961394L13.4973 9.37148C13.604 9.62251 13.6507 9.82663 13.664 10.0387C13.6906 10.5341 13.5173 11.0157 13.1774 11.3863C12.8375 11.7556 12.3775 11.9736 11.8776 12H2.11926C1.91263 11.9874 1.706 11.9405 1.5127 11.8679C0.546196 11.4781 0.0796079 10.3815 0.472875 9.43093L5.35205 0.955449C5.51869 0.657519 5.77198 0.400546 6.08526 0.235396C6.99178 -0.26732 8.14492 0.0629796 8.6515 0.961394ZM7.57833 6.50381C7.57833 6.8209 7.31837 7.0858 6.99843 7.0858C6.67848 7.0858 6.41186 6.8209 6.41186 6.50381V4.63497C6.41186 4.31723 6.67848 4.06025 6.99843 4.06025C7.31837 4.06025 7.57833 4.31723 7.57833 4.63497V6.50381ZM6.99843 9.34505C6.67848 9.34505 6.41186 9.08015 6.41186 8.76373C6.41186 8.44598 6.67848 8.18174 6.99843 8.18174C7.31837 8.18174 7.57833 8.44003 7.57833 8.75646C7.57833 9.08015 7.31837 9.34505 6.99843 9.34505Z"
-                          fill="#C2473B"
-                        />
-                      </svg>
-                    </span>
-                    {errors?.email.message}
-                  </div>
-                )}
-              </div>
-            </label>
-          </div>
+          <RegisterFormInput
+            labelName="Username"
+            configType="username"
+            errors={errors}
+            fieldNameInput="username"
+            placeholderName="Enter your username"
+            register={register}
+            sizeInput="large"
+            typeInput="text"
+          ></RegisterFormInput>
 
-                
+          <RegisterFormInput
+            labelName="First Name"
+            configType="first_name"
+            errors={errors}
+            fieldNameInput="first_name"
+            placeholderName="Enter your first name"
+            register={register}
+            sizeInput="large"
+            typeInput="text"
+          ></RegisterFormInput>
+
+          <RegisterFormInput
+            labelName="Last Name"
+            configType="last_name"
+            errors={errors}
+            fieldNameInput="last_name"
+            placeholderName="Enter your last name"
+            register={register}
+            sizeInput="large"
+            typeInput="text"
+          ></RegisterFormInput>
+
+          <RegisterFormInput
+            labelName="Phone"
+            configType="phone"
+            errors={errors}
+            fieldNameInput="phone"
+            placeholderName="Enter your phone"
+            register={register}
+            sizeInput="large"
+            typeInput="tel"
+          ></RegisterFormInput>
+
+          <RegisterFormInput
+            labelName="Password"
+            configType="password"
+            errors={errors}
+            fieldNameInput="password"
+            placeholderName="Enter your password"
+            register={register}
+            sizeInput="large"
+            typeInput="password"
+          ></RegisterFormInput>
+
           <div className={styles.failContainer}>
             {result.error?.data.password}
             {result.error?.data.username}
