@@ -99,3 +99,63 @@ export const formConfig = (register: any) => ({
     }),
   },
 });
+
+
+export const formGroupInputs =(errors: any) =>  {
+  return ([
+    {
+      name: 'Email',
+      configType: 'email',
+      errors: errors.email,
+      fieldNameInput: "email",
+      placeholderName: "Enter your email",
+      sizeInput: "large",
+      typeInput: "email"
+    },
+    {
+      name: 'Username',
+      configType: 'username',
+      errors: errors.username,
+      fieldNameInput: "username",
+      placeholderName: "Enter your username",
+      sizeInput: "large",
+      typeInput: "text",
+    },
+    {
+      name: 'first_name',
+      configType: 'first_name',
+      errors: errors.first_name,
+      fieldNameInput: "username",
+      placeholderName: "Enter your username",
+      sizeInput: "large",
+      typeInput: "text",
+    },
+    {
+      name: 'last_name',
+      configType: 'last_name',
+      errors: errors.last_name,
+      fieldNameInput: "Last Name",
+      placeholderName: "Enter your last name",
+      sizeInput: "large",
+      typeInput: "text",
+    },
+    {
+      name: 'phone',
+      configType: 'phone',
+      errors: errors.phone,
+      fieldNameInput: "",
+      placeholderName: "Enter your phone",
+      sizeInput: "large",
+      typeInput: "tel",
+    },
+    {
+      name: 'password',
+      configType: 'password',
+      errors: errors.password,
+      fieldNameInput: "password",
+      placeholderName: "Enter your password",
+      sizeInput: "large",
+      typeInput: "password",
+    },
+  ])
+}

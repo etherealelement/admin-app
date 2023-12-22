@@ -15,6 +15,7 @@ import { LoadingOutlined } from '@ant-design/icons';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { RegisterFormInput } from './register-form-input/register-form-input';
+import { formGroupInputs } from './config/config-form';
 
 export const RegisterForm: FC<IRegisterFormProps> = ({
   titleForm,
@@ -63,15 +64,8 @@ export const RegisterForm: FC<IRegisterFormProps> = ({
     }
   }, [result, router]);
 
-  const formConfigObjects = [
-    {
-      name: 'Email',
-      configType: 'email',
-      errors: errors.email,
-      fieldNameInput: "Enter your email",
-      placeholderName: "Enter your email",
-    },
-  ];
+  const inputsConfig = formGroupInputs(errors);
+
 
   return (
     <form className={styles.form} onSubmit={handleSubmit(submit)} {...props}>
@@ -84,71 +78,9 @@ export const RegisterForm: FC<IRegisterFormProps> = ({
       <div className={styles.formInner}>
         <div className={styles.inputBlock}>
           {/* inputs */}
-          <RegisterFormInput
-            labelName="Email"
-            configType="email"
-            errors={errors.email}
-            fieldNameInput="email"
-            placeholderName="Enter your email"
-            register={register}
-            sizeInput="large"
-            typeInput="email"
-          ></RegisterFormInput>
+         
+        
 
-          <RegisterFormInput
-            labelName="Username"
-            configType="username"
-            errors={errors}
-            fieldNameInput="username"
-            placeholderName="Enter your username"
-            register={register}
-            sizeInput="large"
-            typeInput="text"
-          ></RegisterFormInput>
-
-          <RegisterFormInput
-            labelName="First Name"
-            configType="first_name"
-            errors={errors}
-            fieldNameInput="first_name"
-            placeholderName="Enter your first name"
-            register={register}
-            sizeInput="large"
-            typeInput="text"
-          ></RegisterFormInput>
-
-          <RegisterFormInput
-            labelName="Last Name"
-            configType="last_name"
-            errors={errors}
-            fieldNameInput="last_name"
-            placeholderName="Enter your last name"
-            register={register}
-            sizeInput="large"
-            typeInput="text"
-          ></RegisterFormInput>
-
-          <RegisterFormInput
-            labelName="Phone"
-            configType="phone"
-            errors={errors}
-            fieldNameInput="phone"
-            placeholderName="Enter your phone"
-            register={register}
-            sizeInput="large"
-            typeInput="tel"
-          ></RegisterFormInput>
-
-          <RegisterFormInput
-            labelName="Password"
-            configType="password"
-            errors={errors}
-            fieldNameInput="password"
-            placeholderName="Enter your password"
-            register={register}
-            sizeInput="large"
-            typeInput="password"
-          ></RegisterFormInput>
 
           <div className={styles.failContainer}>
             {result.error?.data.password}
