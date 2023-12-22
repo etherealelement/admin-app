@@ -68,6 +68,8 @@ export const RegisterForm: FC<IRegisterFormProps> = ({
       name: 'Email',
       configType: 'email',
       errors: errors.email,
+      fieldNameInput: "Enter your email",
+      placeholderName: "Enter your email",
     },
   ];
 
@@ -86,7 +88,7 @@ export const RegisterForm: FC<IRegisterFormProps> = ({
             labelName="Email"
             configType="email"
             errors={errors.email}
-            fieldNameInput="Enter your email"
+            fieldNameInput="email"
             placeholderName="Enter your email"
             register={register}
             sizeInput="large"
