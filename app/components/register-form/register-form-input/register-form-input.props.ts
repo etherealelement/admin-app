@@ -1,15 +1,16 @@
 import { DetailedHTMLProps, HTMLAttributes } from 'react';
+import { inputType } from '../config/config-form';
 
 export interface RegisterFormInputsProps
   extends DetailedHTMLProps<
     HTMLAttributes<HTMLInputElement>,
     HTMLInputElement
   > {
+    type: "email" | "job" | "password" | "text" | "tel";
   labelName: string;
   placeholderName: string;
-  typeInput: 'email' | 'job' | 'text' | 'password' | 'tel';
+  typeInput: inputType;
   fieldNameInput: string;
-  register: any;
   configType:
     | 'email'
     | 'first_name'
@@ -18,5 +19,4 @@ export interface RegisterFormInputsProps
     | 'phone'
     | 'password';
   sizeInput: 'small' | 'medium' | 'large';
-  errors: any;
 }
