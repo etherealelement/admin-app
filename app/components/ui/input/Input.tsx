@@ -3,14 +3,21 @@ import styles from "./Input.module.scss";
 import cn from "classnames";
 import React, {useEffect} from "react";
 import {useState} from "react";
+import { useFormContext } from "react-hook-form";
+import { formConfig } from "../../register-form/config/config-form";
 export const Input = React.forwardRef(function Input({
 	type,
 	className,
 	size,
-    placeholder,
+  placeholder,
 	nameField,
+	typeInput,
 	...props
 }: InputProps, ref): JSX.Element {
+
+	const {register} = useFormContext();
+
+	console.log(typeInput)
 
 	const [isVisible, setIsVisible] = useState<boolean>(true);
 
@@ -29,7 +36,9 @@ export const Input = React.forwardRef(function Input({
 
 	useEffect(() => {
 		isVisibleToggler(type)
-	}, []);
+	}, [type]);
+
+	
 
 	return (
 		<div className={styles.wrapper}>
@@ -59,7 +68,7 @@ export const Input = React.forwardRef(function Input({
 					[styles.small]: size === "small",
 				})}
                 placeholder={placeholder}
-				ref = {ref}
+				{...formConfig(register, typeInput)}
 				{...props}
 				type={isVisible ? "text" : "password"}
             />

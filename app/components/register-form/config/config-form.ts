@@ -1,161 +1,149 @@
-export const formConfig = (register: any) => ({
-  email: {
-    nameField: 'email',
-    type: 'email',
-    placeholder: 'Enter your email',
-    size: 'large',
-    ...register('email', {
-      required: 'Field is required',
-      minLength: {
-        value: 5,
-        message: 'No less 5 symbols',
-      },
-      pattern: {
-        value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-        message: 'Wrong email format',
-      },
-    }),
-  },
+import { IRegisterFormConfig } from "@/app/global-interfaces/register-form-config";
 
-  username: {
-    nameField: 'username',
+export type inputType = "email" | "username" | "phone" | "last_name" | "first_name" | "password"
+
+export const formConfig = (register: any, typeInput: inputType) => {
+      switch (typeInput) {
+        case "email": 
+          return ({
+              ...register('email', {
+                required: 'Field is required',
+                minLength: {
+                 value: 5,
+                 message: 'No less 5 symbols',
+               },
+               pattern: {
+                 value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                 message: 'Wrong email format',
+                },
+              }),
+            })
+        case "username":
+          return ({
+            ...register('username', {
+                   required: 'Field is required',
+                  minLength: {
+                    value: 5,
+                    message: 'No less 5 symbols',
+                  },
+                }),
+              })
+        case "phone":
+          return ({
+            ...register('phone', {
+                   required: 'Field is required',
+                  minLength: {
+                     value: 5,
+                            message: 'No less 5 symbols',
+                         },
+                   pattern: {
+                     value: /^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/,
+                     message: 'Wrong phone format',
+                   },
+                 }),
+          })
+        case "last_name":
+          return ({
+            ...register('last_name', {
+                 required: 'Field is required',
+                 minLength: {
+                    value: 5,
+                    message: 'No less 5 symbols',
+                  },
+                  pattern: {
+                    value: /^[a-zA-Z][a-zA-Z0-9]{2,15}$/,
+                    message: 'Wrong last name format',
+                  },
+                 }),
+          })
+        case "first_name":
+          return ({
+            ...register('first_name', {
+                   required: 'Field is required',
+                  minLength: {
+                   value: 5,
+                     message: 'No less 5 symbols',
+                   },
+                   pattern: {
+                     value: /^[a-zA-Z][a-zA-Z0-9]{2,15}$/,
+                     message: 'Wrong fist name format',
+                   },
+                 }),
+          })
+        case "password": 
+        return ({
+          ...register('password', {
+                 required: 'Field is required',
+                 minLength: {
+                   value: 5,
+                  message: 'No less 5 symbols',
+                },
+               }),
+        })
+      }
+};
+
+
+export const formGroupInputs = ():IRegisterFormConfig[] => {
+  return ( [{
+    id: 1,
+    name: 'Email',
+    configType: 'email',
+    fieldNameInput: "email",
+    placeholderName: "Enter your email",
+    sizeInput: "large",
+    typeInput: "email",
+    type: "email"
+  },
+  {
+    id: 2,
+    name: 'Username',
+    configType: 'username',
+    fieldNameInput: "username",
+    placeholderName: "Enter your username",
+    sizeInput: "large",
+    typeInput: "username",
     type: 'text',
-    placeholder: 'Enter your email',
-    size: 'large',
-    ...register('username', {
-      required: 'Field is required',
-      minLength: {
-        value: 5,
-        message: 'No less 5 symbols',
-      },
-    }),
   },
-
-  phone: {
-    nameField: 'phone',
-    type: 'tel',
-    placeholder: 'Enter your last name',
-    size: 'large',
-    ...register('phone', {
-      required: 'Field is required',
-      minLength: {
-        value: 5,
-        message: 'No less 5 symbols',
-      },
-      pattern: {
-        value: /^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/,
-        message: 'Wrong phone format',
-      },
-    }),
-  },
-
-  last_name: {
-    nameField: 'last_name',
+  {
+    id: 3,
+    name: 'first_name',
+    configType: 'first_name',
+    fieldNameInput: "First Name",
+    placeholderName: "Enter your first name",
+    sizeInput: "large",
+    typeInput: "first_name",
     type: 'text',
-    placeholder: 'Enter your last name',
-    size: 'large',
-    ...register('last_name', {
-      required: 'Field is required',
-      minLength: {
-        value: 5,
-        message: 'No less 5 symbols',
-      },
-      pattern: {
-        value: /^[a-zA-Z][a-zA-Z0-9]{2,15}$/,
-        message: 'Wrong last name format',
-      },
-    }),
   },
-
-  first_name: {
-    nameField: 'first_name',
-    type: 'email',
-    placeholder: 'Enter your first name',
-    size: 'large',
-    ...register('first_name', {
-      required: 'Field is required',
-      minLength: {
-        value: 5,
-        message: 'No less 5 symbols',
-      },
-      pattern: {
-        value: /^[a-zA-Z][a-zA-Z0-9]{2,15}$/,
-        message: 'Wrong fist name format',
-      },
-    }),
+  {
+    id: 4,
+    name: 'last_name',
+    configType: 'last_name',
+    fieldNameInput: "Last Name",
+    placeholderName: "Enter your last name",
+    sizeInput: "large",
+    typeInput: "last_name",
+    type: 'text',
   },
-
-  password: {
-    nameField: 'password',
-    type: 'password',
-    placeholder: 'Enter your password',
-    size: 'large',
-    ...register('password', {
-      required: 'Field is required',
-      minLength: {
-        value: 5,
-        message: 'No less 5 symbols',
-      },
-    }),
+  {
+    id: 5,
+    name: 'phone',
+    configType: 'phone',
+    fieldNameInput: "Phone",
+    placeholderName: "Enter your phone",
+    sizeInput: "large",
+    typeInput: "phone",
+    type: "tel",
   },
-});
-
-
-export const formGroupInputs =(errors: any) =>  {
-  return ([
-    {
-      name: 'Email',
-      configType: 'email',
-      errors: errors.email,
-      fieldNameInput: "email",
-      placeholderName: "Enter your email",
-      sizeInput: "large",
-      typeInput: "email"
-    },
-    {
-      name: 'Username',
-      configType: 'username',
-      errors: errors.username,
-      fieldNameInput: "username",
-      placeholderName: "Enter your username",
-      sizeInput: "large",
-      typeInput: "text",
-    },
-    {
-      name: 'first_name',
-      configType: 'first_name',
-      errors: errors.first_name,
-      fieldNameInput: "username",
-      placeholderName: "Enter your username",
-      sizeInput: "large",
-      typeInput: "text",
-    },
-    {
-      name: 'last_name',
-      configType: 'last_name',
-      errors: errors.last_name,
-      fieldNameInput: "Last Name",
-      placeholderName: "Enter your last name",
-      sizeInput: "large",
-      typeInput: "text",
-    },
-    {
-      name: 'phone',
-      configType: 'phone',
-      errors: errors.phone,
-      fieldNameInput: "",
-      placeholderName: "Enter your phone",
-      sizeInput: "large",
-      typeInput: "tel",
-    },
-    {
-      name: 'password',
-      configType: 'password',
-      errors: errors.password,
-      fieldNameInput: "password",
-      placeholderName: "Enter your password",
-      sizeInput: "large",
-      typeInput: "password",
-    },
-  ])
+  {
+    id: 6,
+    name: 'password',
+    configType: 'password',
+    fieldNameInput: "password",
+    placeholderName: "Enter your password",
+    sizeInput: "large",
+    typeInput: "password",
+    type: "password",
+  },
+])
 }

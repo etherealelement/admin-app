@@ -1,13 +1,12 @@
 import { FC } from 'react';
 import styles from '@/app/components/auth-form/auth-from.module.scss';
-import { Input } from '@/app/components/ui/input/Input';
 import Link from 'next/link';
 import { Button } from '@/app/components/ui/button/button';
 import {
   IRegisterForm,
   IRegisterFormProps,
 } from '@/app/components/register-form/register-form.props';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { SubmitHandler, useForm, FormProvider, useFormContext } from 'react-hook-form';
 import { useAddUserMutation } from '@/app/redux/store/register-api';
 import { ResponseRegisterApi } from '@/app/redux/interfaces/register-user';
 import { Spin } from 'antd';
@@ -27,24 +26,16 @@ export const RegisterForm: FC<IRegisterFormProps> = ({
   className,
   ...props
 }: IRegisterFormProps) => {
-  // form client validation
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isDirty, isValid },
-    reset,
-    getValues,
-  } = useForm<IRegisterForm>({
-    defaultValues: {},
-    mode: 'onChange',
-  });
 
-  console.log(errors);
+ const methods = useForm<IRegisterForm>({
+    defaultValues: {},
+    mode: "onChange",
+  })
 
   const [CreateUseMutation, result] = useAddUserMutation<ResponseRegisterApi>();
 
   const addUserData = async () => {
-    const fieldData = getValues();
+    const fieldData = methods.getValues();
     try {
       await CreateUseMutation(fieldData);
     } catch (error) {
@@ -53,7 +44,7 @@ export const RegisterForm: FC<IRegisterFormProps> = ({
   };
 
   const submit: SubmitHandler<IRegisterForm> = (data) => {
-    reset();
+    methods.reset();
   };
 
   const router = useRouter();
@@ -64,11 +55,12 @@ export const RegisterForm: FC<IRegisterFormProps> = ({
     }
   }, [result, router]);
 
-  const inputsConfig = formGroupInputs(errors);
+
 
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit(submit)} {...props}>
+    <FormProvider {...methods}>
+    <form className={styles.form} onSubmit={methods.handleSubmit(submit)} {...props}>
       <div className={styles.formDescription}>
         <h1 className={styles.formDescriptionTitle}>{titleForm}</h1>
         <label className={styles.formDescriptionText}>
@@ -77,9 +69,16 @@ export const RegisterForm: FC<IRegisterFormProps> = ({
       </div>
       <div className={styles.formInner}>
         <div className={styles.inputBlock}>
-          {/* inputs */}
-         
-        
+        {formGroupInputs().map(item => <RegisterFormInput
+        key={item.id} 
+        configType={item.configType}
+        fieldNameInput={item.fieldNameInput}
+        labelName={item.fieldNameInput}
+        placeholderName={item.placeholderName}
+        sizeInput={item.sizeInput}
+        typeInput={item.typeInput}
+        type={item.type}
+        ></RegisterFormInput>)} 
 
 
           <div className={styles.failContainer}>
@@ -88,7 +87,7 @@ export const RegisterForm: FC<IRegisterFormProps> = ({
           </div>
         </div>
         <Button
-          type={(isDirty && isValid && 'login') || 'disable'}
+          type={(methods.formState.isDirty && methods.formState.isValid && 'login') || 'disable'}
           onClick={() => addUserData()}
         >
           {!result.isLoading && buttonText}
@@ -131,5 +130,6 @@ export const RegisterForm: FC<IRegisterFormProps> = ({
         </div>
       </div>
     </form>
+    </FormProvider>
   );
 };
