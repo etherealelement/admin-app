@@ -89,7 +89,7 @@ export const formGroupInputs = ():IRegisterFormConfig[] => {
     id: 1,
     name: 'Email',
     configType: 'email',
-    fieldNameInput: "email",
+    fieldNameInput: "Email",
     placeholderName: "Enter your email",
     sizeInput: "large",
     typeInput: "email",
@@ -99,7 +99,7 @@ export const formGroupInputs = ():IRegisterFormConfig[] => {
     id: 2,
     name: 'Username',
     configType: 'username',
-    fieldNameInput: "username",
+    fieldNameInput: "Username",
     placeholderName: "Enter your username",
     sizeInput: "large",
     typeInput: "username",
@@ -139,7 +139,7 @@ export const formGroupInputs = ():IRegisterFormConfig[] => {
     id: 6,
     name: 'password',
     configType: 'password',
-    fieldNameInput: "password",
+    fieldNameInput: "Password",
     placeholderName: "Enter your password",
     sizeInput: "large",
     typeInput: "password",
@@ -147,3 +147,4 @@ export const formGroupInputs = ():IRegisterFormConfig[] => {
   },
 ])
 }
+ 

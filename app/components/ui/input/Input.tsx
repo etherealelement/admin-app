@@ -1,10 +1,11 @@
 import { InputProps } from "./Input.props";
 import styles from "./Input.module.scss";
 import cn from "classnames";
-import React, {useEffect} from "react";
+import React, {ChangeEvent, useEffect} from "react";
 import {useState} from "react";
 import { useFormContext } from "react-hook-form";
 import { formConfig } from "../../register-form/config/config-form";
+import { InputMask } from '@react-input/mask';
 export const Input = React.forwardRef(function Input({
 	type,
 	className,
@@ -16,10 +17,9 @@ export const Input = React.forwardRef(function Input({
 }: InputProps, ref): JSX.Element {
 
 	const {register} = useFormContext();
-
-	console.log(typeInput)
-
 	const [isVisible, setIsVisible] = useState<boolean>(true);
+
+
 
 	const isVisibleToggler = (type: "password" | "text" | "email" | "job"| "tel") => {
 		switch (type) {
@@ -39,6 +39,7 @@ export const Input = React.forwardRef(function Input({
 	}, [type]);
 
 	
+
 
 	return (
 		<div className={styles.wrapper}>
@@ -60,7 +61,17 @@ export const Input = React.forwardRef(function Input({
 					</svg>
 				</span>
 			)}
-			<input
+			{typeInput === "phone" ? <InputMask
+			mask="+7 (___) ___-__-__" replacement={{ _: /\d/ }}
+			className={cn(styles.input, className, {
+				[styles.large]: size === "large",
+				[styles.medium]: size === "medium",
+				[styles.small]: size === "small",
+			})}
+			placeholder="+7 (___) ___-__-__"
+			{...formConfig(register, typeInput)}
+			{...props}
+			></InputMask> :<input
 				name={nameField}
 				className={cn(styles.input, className, {
 					[styles.large]: size === "large",
@@ -71,7 +82,7 @@ export const Input = React.forwardRef(function Input({
 				{...formConfig(register, typeInput)}
 				{...props}
 				type={isVisible ? "text" : "password"}
-            />
+            />}
 			{type === "password" && <span
 				className={styles.iconCheck}
 				onClick={() => setIsVisible(e => !e)}
