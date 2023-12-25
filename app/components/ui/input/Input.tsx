@@ -18,8 +18,7 @@ export const Input = React.forwardRef(function Input({
 
 	const {register} = useFormContext();
 	const [isVisible, setIsVisible] = useState<boolean>(true);
-
-
+  
 
 	const isVisibleToggler = (type: "password" | "text" | "email" | "job"| "tel") => {
 		switch (type) {
