@@ -1,15 +1,12 @@
 'use client';
-import {FC, useState} from 'react';
+import {FC} from 'react';
 import {Input} from '../ui/input/Input';
 import styles from './auth-from.module.scss';
 import {Button} from '../ui/button/button';
-import {IForm, IFormProps} from './auth-from.props';
-import {useForm, SubmitHandler} from 'react-hook-form';
+import {IFormProps} from './auth-from.props';
+import {useForm} from 'react-hook-form';
 import Link from "next/link";
-import {FormErrorInterface} from "../../global-interfaces/formError.interface";
-import {isEmptyObject} from "@/app/helpers/functions/isEmptyObject";
-import isEmpty from "lodash/isEmpty";
-import {ButtonStatement} from "@/app/components/ui/button/button.props";
+import { ResponseLoginApi } from '@/app/redux/interfaces/login-user';
 
 export const AuthForm: FC<IFormProps> = ({
                                              titleForm,
@@ -22,21 +19,13 @@ export const AuthForm: FC<IFormProps> = ({
                                              descriptionLink,
                                              ...props
                                          }: IFormProps) => {
-    const {
-        register,
-        handleSubmit,
-        formState: {errors, isDirty, isValid},
-        reset,
-    } = useForm<IForm>({
-        defaultValues: {},
-        mode: 'onChange',
-    });
+;
+    const methods = useForm<IFormProps>({
+    defaultValues: {},
+    mode: "onChange",
+    })
 
-
-    const submit: SubmitHandler<IForm> = (data) => {
-        reset();
-    };
-
+    const [CreateLoginMutation, result] = useLoginMutation<ResponseLoginApi>()
 
     return (
         <form className={styles.form} onSubmit={handleSubmit(submit)} {...props}>
