@@ -16,11 +16,11 @@ import { useAddUserMutation } from '@/app/redux/store/register-api';
 import { EditableRow } from '@/app/components/dashboard/editable/editable-row';
 import { EditableCell } from '@/app/components/dashboard/editable/editable-cell';
 import { InputSearchValueContext } from '@/app/pages/main-page/context/main-context';
-
-export const Dashboard: FC<DashboardProps> = () => {
+import {observer} from "mobx-react-lite";
+import products from "../../services/product.service"
+export const Dashboard: FC<DashboardProps> = observer(() => {
   // rtk hooks
   const inputValue = useContext(InputSearchValueContext);
-  const { data = [], isLoading } = useGetUsersQuery(inputValue);
   const [addUser, { isError }] = useAddUserMutation();
   const [deleteProduct] = useDeleteUserMutation();
 
@@ -30,8 +30,8 @@ export const Dashboard: FC<DashboardProps> = () => {
   const [newUserData, setNewUserData] = useState<DataType>();
 
   useEffect(() => {
-    stateDataState(data);
-  }, [data]);
+    products.fetchProducts()
+      }, []);
 
   const handleAddUser = async (dataState: DataType) => {
     if (newUserData) {
@@ -84,82 +84,91 @@ export const Dashboard: FC<DashboardProps> = () => {
     dataIndex: any;
   })[] = [
     {
-      title: 'Full name',
+      title: 'Product Name',
       dataIndex: 'name',
       key: 'id',
-      width: '30%',
+      width: '20%',
       editable: true,
       sorter: (a, b) => a.name.length - b.username.length,
       render: (text) => <Typography.Text copyable>{text}</Typography.Text>,
     },
     {
-      title: 'User name',
-      dataIndex: 'username',
+      title: 'Brand Name',
+      dataIndex: 'brand',
+      key: 'id',
+      width: '20%',
+      editable: true,
+      sorter: (a, b) => a.name.length - b.username.length,
+      render: (text) => <Typography.Text copyable>{text}</Typography.Text>,
+    },
+    {
+      title: 'Price',
+      dataIndex: 'price',
       editable: true,
       key: 'id',
       sorter: (a, b) => a.username.length - b.username.length,
       render: (text) => <Typography.Text copyable>{text}</Typography.Text>,
     },
     {
-      title: 'E-mail',
-      dataIndex: 'email',
+      title: 'Is Ready',
+      dataIndex: 'ready',
       key: 'id',
       editable: true,
-      sorter: (a, b) => a.email.length - b.email.length,
+      sorter: (a, b) => a.ready.length - b.ready.length,
       render: (text) => <Typography.Text copyable>{text}</Typography.Text>,
     },
     {
-      title: 'Website',
-      dataIndex: 'website',
+      title: "Is retail allowed",
+      dataIndex: 'retail',
       key: 'id',
       editable: true,
-      sorter: (a, b) => a.name.length - b.name.length,
+      sorter: (a, b) => a.retail.length - b.retail.length,
       render: (text) => <a href={text}>{text}</a>,
     },
 
     {
-      title: 'company',
-      dataIndex: ['company', 'name'],
+      title: 'Description',
+      dataIndex: ['price', 'retail'],
       editable: true,
       key: 'id',
     },
     {
-      title: 'Phone',
-      dataIndex: 'phone',
+      title: 'Created at',
+      dataIndex: 'created',
       key: 'id',
       editable: true,
-      sorter: (a, b) => a.name.length - b.name.length,
+      sorter: (a, b) => a.created.length - b.created.length,
     },
     {
-      title: 'Location',
-      dataIndex: ['address', 'city'],
+      title: 'Updated at',
+      dataIndex: "updated",
       editable: true,
       key: 'id',
-      sorter: (a, b) => a.email.length - b.email.length,
+      sorter: (a, b) => a.updated.length - b.updated.length,
       render: (text) => <Typography.Text copyable>{text}</Typography.Text>,
     },
     {
       title: 'save',
       dataIndex: 'operation',
       render: (_, record: { key: React.Key }) =>
-        dataSource.length >= 1 ? (
-          <Popconfirm title="Sure to save?" onConfirm={handleAddUser}>
-            <a>Save</a>
-          </Popconfirm>
-        ) : null,
+          dataSource.length >= 1 ? (
+              <Popconfirm title="Sure to save?" onConfirm={handleAddUser}>
+                <a>Save</a>
+              </Popconfirm>
+          ) : null,
     },
     {
       title: 'delete',
       dataIndex: 'operation',
       render: (_, record: { key: React.Key }) =>
-        dataSource.length >= 1 ? (
-          <Popconfirm
-            title="Sure to delete?"
-            onConfirm={() => handleDelete(record.key)}
-          >
-            <a>Delete</a>
-          </Popconfirm>
-        ) : null,
+          dataSource.length >= 1 ? (
+              <Popconfirm
+                  title="Sure to delete?"
+                  onConfirm={() => handleDelete(record.key)}
+              >
+                <a>Delete</a>
+              </Popconfirm>
+          ) : null,
     },
   ];
   const defaultColumns = columns.map((col) => {
@@ -178,19 +187,20 @@ export const Dashboard: FC<DashboardProps> = () => {
     };
   });
   return (
-    <div>
-      {/*<input onChange={}></input>*/}
-      <Button onClick={handleAdd} type="primary" style={{ marginBottom: 16 }}>
-        Add new user
-      </Button>
-      <Table
-        components={components}
-        rowClassName={() => 'editable-row'}
-        bordered
-        size={'middle'}
-        dataSource={dataSource}
-        columns={defaultColumns as ColumnTypes}
-      />
-    </div>
+      <div>
+        {/*<input onChange={}></input>*/}
+        <Button onClick={handleAdd} type="primary" style={{ marginBottom: 16 }}>
+          Add new user
+        </Button>
+        <Table
+            components={components}
+            rowClassName={() => 'editable-row'}
+            bordered
+            size={'middle'}
+            dataSource={dataSource}
+            columns={defaultColumns as ColumnTypes}
+        />
+      </div>
   );
-};
+});
+
