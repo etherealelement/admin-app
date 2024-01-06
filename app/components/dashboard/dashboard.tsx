@@ -6,7 +6,8 @@ import './dashboard.scss';
 import {
   ColumnTypes,
   DashboardProps,
-  DataType,
+  IResponseProducts,
+    IProducts
 } from '@/app/components/dashboard/dashboard.props';
 import {
   useGetUsersQuery,
@@ -17,34 +18,39 @@ import { EditableRow } from '@/app/components/dashboard/editable/editable-row';
 import { EditableCell } from '@/app/components/dashboard/editable/editable-cell';
 import { InputSearchValueContext } from '@/app/pages/main-page/context/main-context';
 import {observer} from "mobx-react-lite";
-import products from "../../services/product.service"
+import product from "../../services/product.service";
+import shortid from "shortid";
+
+
+
 export const Dashboard: FC<DashboardProps> = observer(() => {
   // rtk hooks
-  const inputValue = useContext(InputSearchValueContext);
   const [addUser, { isError }] = useAddUserMutation();
   const [deleteProduct] = useDeleteUserMutation();
+  const [newUserData, setNewUserData] = useState<IProducts>();
 
-  const [dataState, stateDataState] = useState<DataType[]>([]);
-  const dataSource = dataState.map((item) => ({ ...item, key: item.id }));
-  const [count, setCount] = useState(11);
-  const [newUserData, setNewUserData] = useState<DataType>();
+  const id = shortid.generate();
 
   useEffect(() => {
-    products.fetchProducts()
+    product.fetchProducts()
       }, []);
 
-  const handleAddUser = async (dataState: DataType) => {
+  const dataSource = product.products.map( (item) => ({...Object.values(item), key: item.id }))
+  
+  const handleAddUser = async (dataState: IProducts) => {
     if (newUserData) {
       await addUser(newUserData).unwrap();
     }
   };
 
+  console.log(dataSource);
+
   const handleDelete = (id: React.Key) => {
     const newData = dataSource.filter((item) => item.id !== id);
     deleteProduct(id);
-    stateDataState(newData);
   };
-  const handleSave = (row: DataType) => {
+
+  const handleSave = (row: IProducts) => {
     const newData = [...dataSource];
     const index = newData.findIndex((item) => row.id === item.id);
     const item = newData[index];
@@ -53,31 +59,36 @@ export const Dashboard: FC<DashboardProps> = observer(() => {
       ...row,
     });
     setNewUserData(item);
-    stateDataState(newData);
+    setProducts(newData);
   };
+
+
   const components = {
     body: {
       row: EditableRow,
       cell: EditableCell,
     },
   };
+
+  
   const handleAdd = () => {
-    const newData: DataType = {
-      id: count,
-      name: ``,
-      username: '',
-      company: {
-        name: '',
-      },
-      email: '',
-      website: '',
-      phone: '',
-      address: {
-        city: '',
-      },
+    const newData: IProducts = {
+      id,
+      name: "",
+      name_from_1c: "",
+      price: "",
+      volume: "",
+      description: "",
+      created_at: "",
+      updated_at: "",
+      brand: {
+        id,
+        name: "",
+        icon: "",
+        margin: 0,
+      }
     };
-    stateDataState([...dataSource, newData]);
-    setCount((e) => e + 1);
+    setProducts([...dataSource, newData]);
   };
   const columns: (ColumnTypes[number] & {
     editable?: boolean;
@@ -85,8 +96,8 @@ export const Dashboard: FC<DashboardProps> = observer(() => {
   })[] = [
     {
       title: 'Product Name',
-      dataIndex: 'name',
-      key: 'id',
+      dataIndex: '1',
+      key: '0',
       width: '20%',
       editable: true,
       sorter: (a, b) => a.name.length - b.username.length,
@@ -94,8 +105,8 @@ export const Dashboard: FC<DashboardProps> = observer(() => {
     },
     {
       title: 'Brand Name',
-      dataIndex: 'brand',
-      key: 'id',
+      dataIndex: ['8','1'],
+      key: '0',
       width: '20%',
       editable: true,
       sorter: (a, b) => a.name.length - b.username.length,
@@ -177,7 +188,7 @@ export const Dashboard: FC<DashboardProps> = observer(() => {
     }
     return {
       ...col,
-      onCell: (record: DataType) => ({
+      onCell: (record: IProducts) => ({
         record,
         editable: col.editable,
         dataIndex: col.dataIndex,

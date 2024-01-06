@@ -6,28 +6,33 @@ export interface DashboardProps extends  DetailedHTMLProps<HTMLAttributes<HTMLDi
 }
 
 
-export interface DataType {
-    id: number | string,
-    name: string;
-    username: string;
-    email: string;
-    address: {
-        street: string,
-        suite: string,
-        city: string,
-        zipcode: string,
-        geo: {
-            lat: string,
-            lng: string,
-        }
-    },
-    phone: string,
-    website: string,
-    company: {
-        name: string,
-        catchPhrase: string,
-        bs: string,
-    }
+export interface IResponseProducts {
+    count: number
+    next: any
+    previous: any,
+    results: IProducts[]
+}
+
+export interface IProducts {
+    id: string
+    name: string
+    name_from_1c: string
+    price: string
+    volume: any
+    is_ready?: boolean
+    is_retail_allowed?: boolean
+    description: string
+    images?: any[]
+    created_at: string
+    updated_at: string
+    brand: IBrand
+}
+
+export interface IBrand {
+    id: string
+    name: string
+    icon: string
+    margin: number
 }
 
  interface userInterface {

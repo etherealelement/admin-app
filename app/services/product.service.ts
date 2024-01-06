@@ -1,22 +1,28 @@
 import {IProduct} from "@/app/services/interfaces/product.interface";
-import {action, makeAutoObservable, observable} from "mobx";
+import {action, makeAutoObservable, observable, runInAction} from "mobx";
 
 const usersApi: string = process.env.USERS_LIST_API as string;
-class Products {
+class Product {
   products: IProduct[] = [];
 
   constructor() {
     makeAutoObservable(this, {
-      products: observable,
-        fetchProducts: action
+        products: observable,
+        fetchProducts: action,
     })
   }
 
-   fetchProducts() {
-    fetch("https://test-api.itrum.ru/api/products/")
-        .then(response => response.json())
-        .then(data => this.products = [...this.products, data.results])
+   async fetchProducts() {
+        try {
+            const response = await fetch("https://test-api.itrum.ru/api/products/");
+            const data = await response.json()
+            runInAction(() => {
+               return this.products = [...this.products, ...data.results];
+            })
+        } catch (e) {
+            console.log(e)
+        }
    }
 }
 
-export default new Products();
+export default new Product();
