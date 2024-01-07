@@ -18,6 +18,7 @@ import { InputSearchValueContext } from '@/app/pages/main-page/context/main-cont
 import {observer} from "mobx-react-lite";
 import product from "../../services/product.service";
 import shortid from "shortid";
+import { IProduct } from '@/app/services/interfaces/product.interface';
 
 
 
@@ -55,8 +56,8 @@ export const Dashboard: FC<DashboardProps> = observer(():JSX.Element => {
     }
 })
   
-  const handleAddUser = async (dataState: IProducts) => {
-    if (newUserData) {
+  const handleAddUser = async () => {
+    if (newProduct) {
       await addUser(newUserData).unwrap();
     }
   };
@@ -88,7 +89,7 @@ export const Dashboard: FC<DashboardProps> = observer(():JSX.Element => {
 
   
   const handleAdd = () => {
-    const newData: IProducts = {
+    const newData: IProducts= {
       name: "", 
       id: id, 
       name_from_1c: "",
@@ -96,6 +97,7 @@ export const Dashboard: FC<DashboardProps> = observer(():JSX.Element => {
       description: "",
       created_at: "",
       updated_at: "",
+      images: [],
       brand: {
         id: "",
         name: "",
