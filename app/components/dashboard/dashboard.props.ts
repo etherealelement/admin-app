@@ -18,7 +18,7 @@ export interface IProducts {
     name: string
     name_from_1c: string
     price: string
-    volume: any
+    volume?: any
     is_ready?: boolean
     is_retail_allowed?: boolean
     description: string

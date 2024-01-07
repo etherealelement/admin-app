@@ -1,16 +1,14 @@
 'use client';
-import { FC, useContext, useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import React from 'react';
-import { Table, Typography, Form, Input, Popconfirm, Button } from 'antd';
+import { Table, Typography, Popconfirm, Button } from 'antd';
 import './dashboard.scss';
 import {
   ColumnTypes,
   DashboardProps,
-  IResponseProducts,
     IProducts
 } from '@/app/components/dashboard/dashboard.props';
 import {
-  useGetUsersQuery,
   useDeleteUserMutation,
 } from '@/app/redux';
 import { useAddUserMutation } from '@/app/redux/store/register-api';
@@ -23,19 +21,39 @@ import shortid from "shortid";
 
 
 
-export const Dashboard: FC<DashboardProps> = observer(() => {
+export const Dashboard: FC<DashboardProps> = observer(():JSX.Element => {
   // rtk hooks
   const [addUser, { isError }] = useAddUserMutation();
   const [deleteProduct] = useDeleteUserMutation();
-  const [newUserData, setNewUserData] = useState<IProducts>();
-
+  const [newProduct, setNewProduct] = useState<IProducts[]>([]);
   const id = shortid.generate();
 
   useEffect(() => {
-    product.fetchProducts()
-      }, []);
+    product.fetchProducts();
+  }, [])
 
-  const dataSource = product.products.map( (item) => ({...Object.values(item), key: item.id }))
+
+  const dataSource = product.products.map( (item) => {
+    return {id: item.id,
+      name: item.name, 
+      key: item.id, 
+      name_from_1c: item.name_from_1c,
+      price: item.price,
+      volume: item.volume,
+      is_ready: item.is_ready,
+      is_retail_allowed: item.is_retail_allowed,
+      description: item.description,
+      images: item.description,
+      created_at: item.created_at,
+      updated_at: item.updated_at,
+      brand: {
+        id: item.brand.id,
+        name: item.brand.name,
+        icon: item.brand.icon,
+        margin: item.brand.margin
+      }
+    }
+})
   
   const handleAddUser = async (dataState: IProducts) => {
     if (newUserData) {
@@ -43,14 +61,12 @@ export const Dashboard: FC<DashboardProps> = observer(() => {
     }
   };
 
-  console.log(dataSource);
-
   const handleDelete = (id: React.Key) => {
     const newData = dataSource.filter((item) => item.id !== id);
     deleteProduct(id);
   };
 
-  const handleSave = (row: IProducts) => {
+  const handleSave = (row: IProducts[]) => {
     const newData = [...dataSource];
     const index = newData.findIndex((item) => row.id === item.id);
     const item = newData[index];
@@ -73,22 +89,21 @@ export const Dashboard: FC<DashboardProps> = observer(() => {
   
   const handleAdd = () => {
     const newData: IProducts = {
-      id,
-      name: "",
+      name: "", 
+      id: id, 
       name_from_1c: "",
       price: "",
-      volume: "",
       description: "",
       created_at: "",
       updated_at: "",
       brand: {
-        id,
+        id: "",
         name: "",
         icon: "",
         margin: 0,
       }
     };
-    setProducts([...dataSource, newData]);
+    setNewProduct([...dataSource, newData]);
   };
   const columns: (ColumnTypes[number] & {
     editable?: boolean;
@@ -96,8 +111,8 @@ export const Dashboard: FC<DashboardProps> = observer(() => {
   })[] = [
     {
       title: 'Product Name',
-      dataIndex: '1',
-      key: '0',
+      dataIndex: 'name',
+      key: 'id',
       width: '20%',
       editable: true,
       sorter: (a, b) => a.name.length - b.username.length,
@@ -105,7 +120,7 @@ export const Dashboard: FC<DashboardProps> = observer(() => {
     },
     {
       title: 'Brand Name',
-      dataIndex: ['8','1'],
+      dataIndex: ['brand','name'],
       key: '0',
       width: '20%',
       editable: true,
@@ -121,38 +136,15 @@ export const Dashboard: FC<DashboardProps> = observer(() => {
       render: (text) => <Typography.Text copyable>{text}</Typography.Text>,
     },
     {
-      title: 'Is Ready',
-      dataIndex: 'ready',
-      key: 'id',
-      editable: true,
-      sorter: (a, b) => a.ready.length - b.ready.length,
-      render: (text) => <Typography.Text copyable>{text}</Typography.Text>,
-    },
-    {
-      title: "Is retail allowed",
-      dataIndex: 'retail',
-      key: 'id',
-      editable: true,
-      sorter: (a, b) => a.retail.length - b.retail.length,
-      render: (text) => <a href={text}>{text}</a>,
-    },
-
-    {
-      title: 'Description',
-      dataIndex: ['price', 'retail'],
-      editable: true,
-      key: 'id',
-    },
-    {
       title: 'Created at',
-      dataIndex: 'created',
+      dataIndex: 'created_at',
       key: 'id',
       editable: true,
       sorter: (a, b) => a.created.length - b.created.length,
     },
     {
       title: 'Updated at',
-      dataIndex: "updated",
+      dataIndex: "updated_at",
       editable: true,
       key: 'id',
       sorter: (a, b) => a.updated.length - b.updated.length,
@@ -201,7 +193,7 @@ export const Dashboard: FC<DashboardProps> = observer(() => {
       <div>
         {/*<input onChange={}></input>*/}
         <Button onClick={handleAdd} type="primary" style={{ marginBottom: 16 }}>
-          Add new user
+          Add new product
         </Button>
         <Table
             components={components}
