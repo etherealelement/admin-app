@@ -1,39 +1,61 @@
 'use client';
-import { FC, useContext, useEffect, useRef, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import React from 'react';
-import { Table, Typography, Form, Input, Popconfirm, Button } from 'antd';
+import { Table, Typography, Popconfirm, Button } from 'antd';
 import './dashboard.scss';
 import {
   ColumnTypes,
   DashboardProps,
-  DataType,
+    IProducts
 } from '@/app/components/dashboard/dashboard.props';
 import {
-  useGetUsersQuery,
   useDeleteUserMutation,
 } from '@/app/redux';
 import { useAddUserMutation } from '@/app/redux/store/register-api';
 import { EditableRow } from '@/app/components/dashboard/editable/editable-row';
 import { EditableCell } from '@/app/components/dashboard/editable/editable-cell';
 import { InputSearchValueContext } from '@/app/pages/main-page/context/main-context';
+import {observer} from "mobx-react-lite";
+import product from "../../services/product.service";
+import shortid from "shortid";
 
-export const Dashboard: FC<DashboardProps> = () => {
+
+
+export const Dashboard: FC<DashboardProps> = observer(():JSX.Element => {
   // rtk hooks
-  const inputValue = useContext(InputSearchValueContext);
-  const { data = [], isLoading } = useGetUsersQuery(inputValue);
   const [addUser, { isError }] = useAddUserMutation();
   const [deleteProduct] = useDeleteUserMutation();
-
-  const [dataState, stateDataState] = useState<DataType[]>([]);
-  const dataSource = dataState.map((item) => ({ ...item, key: item.id }));
-  const [count, setCount] = useState(11);
-  const [newUserData, setNewUserData] = useState<DataType>();
+  const [newProduct, setNewProduct] = useState<IProducts[]>([]);
+  const id = shortid.generate();
 
   useEffect(() => {
-    stateDataState(data);
-  }, [data]);
+    product.fetchProducts();
+  }, [])
 
-  const handleAddUser = async (dataState: DataType) => {
+
+  const dataSource = product.products.map( (item) => {
+    return {id: item.id,
+      name: item.name, 
+      key: item.id, 
+      name_from_1c: item.name_from_1c,
+      price: item.price,
+      volume: item.volume,
+      is_ready: item.is_ready,
+      is_retail_allowed: item.is_retail_allowed,
+      description: item.description,
+      images: item.description,
+      created_at: item.created_at,
+      updated_at: item.updated_at,
+      brand: {
+        id: item.brand.id,
+        name: item.brand.name,
+        icon: item.brand.icon,
+        margin: item.brand.margin
+      }
+    }
+})
+  
+  const handleAddUser = async (dataState: IProducts) => {
     if (newUserData) {
       await addUser(newUserData).unwrap();
     }
@@ -42,9 +64,9 @@ export const Dashboard: FC<DashboardProps> = () => {
   const handleDelete = (id: React.Key) => {
     const newData = dataSource.filter((item) => item.id !== id);
     deleteProduct(id);
-    stateDataState(newData);
   };
-  const handleSave = (row: DataType) => {
+
+  const handleSave = (row: IProducts[]) => {
     const newData = [...dataSource];
     const index = newData.findIndex((item) => row.id === item.id);
     const item = newData[index];
@@ -53,113 +75,103 @@ export const Dashboard: FC<DashboardProps> = () => {
       ...row,
     });
     setNewUserData(item);
-    stateDataState(newData);
+    setProducts(newData);
   };
+
+
   const components = {
     body: {
       row: EditableRow,
       cell: EditableCell,
     },
   };
+
+  
   const handleAdd = () => {
-    const newData: DataType = {
-      id: count,
-      name: ``,
-      username: '',
-      company: {
-        name: '',
-      },
-      email: '',
-      website: '',
-      phone: '',
-      address: {
-        city: '',
-      },
+    const newData: IProducts = {
+      name: "", 
+      id: id, 
+      name_from_1c: "",
+      price: "",
+      description: "",
+      created_at: "",
+      updated_at: "",
+      brand: {
+        id: "",
+        name: "",
+        icon: "",
+        margin: 0,
+      }
     };
-    stateDataState([...dataSource, newData]);
-    setCount((e) => e + 1);
+    setNewProduct([...dataSource, newData]);
   };
   const columns: (ColumnTypes[number] & {
     editable?: boolean;
     dataIndex: any;
   })[] = [
     {
-      title: 'Full name',
+      title: 'Product Name',
       dataIndex: 'name',
       key: 'id',
-      width: '30%',
+      width: '20%',
       editable: true,
       sorter: (a, b) => a.name.length - b.username.length,
       render: (text) => <Typography.Text copyable>{text}</Typography.Text>,
     },
     {
-      title: 'User name',
-      dataIndex: 'username',
+      title: 'Brand Name',
+      dataIndex: ['brand','name'],
+      key: '0',
+      width: '20%',
+      editable: true,
+      sorter: (a, b) => a.name.length - b.username.length,
+      render: (text) => <Typography.Text copyable>{text}</Typography.Text>,
+    },
+    {
+      title: 'Price',
+      dataIndex: 'price',
       editable: true,
       key: 'id',
       sorter: (a, b) => a.username.length - b.username.length,
       render: (text) => <Typography.Text copyable>{text}</Typography.Text>,
     },
     {
-      title: 'E-mail',
-      dataIndex: 'email',
+      title: 'Created at',
+      dataIndex: 'created_at',
       key: 'id',
       editable: true,
-      sorter: (a, b) => a.email.length - b.email.length,
-      render: (text) => <Typography.Text copyable>{text}</Typography.Text>,
+      sorter: (a, b) => a.created.length - b.created.length,
     },
     {
-      title: 'Website',
-      dataIndex: 'website',
-      key: 'id',
-      editable: true,
-      sorter: (a, b) => a.name.length - b.name.length,
-      render: (text) => <a href={text}>{text}</a>,
-    },
-
-    {
-      title: 'company',
-      dataIndex: ['company', 'name'],
+      title: 'Updated at',
+      dataIndex: "updated_at",
       editable: true,
       key: 'id',
-    },
-    {
-      title: 'Phone',
-      dataIndex: 'phone',
-      key: 'id',
-      editable: true,
-      sorter: (a, b) => a.name.length - b.name.length,
-    },
-    {
-      title: 'Location',
-      dataIndex: ['address', 'city'],
-      editable: true,
-      key: 'id',
-      sorter: (a, b) => a.email.length - b.email.length,
+      sorter: (a, b) => a.updated.length - b.updated.length,
       render: (text) => <Typography.Text copyable>{text}</Typography.Text>,
     },
     {
       title: 'save',
       dataIndex: 'operation',
       render: (_, record: { key: React.Key }) =>
-        dataSource.length >= 1 ? (
-          <Popconfirm title="Sure to save?" onConfirm={handleAddUser}>
-            <a>Save</a>
-          </Popconfirm>
-        ) : null,
+          dataSource.length >= 1 ? (
+              <Popconfirm title="Sure to save?" onConfirm={handleAddUser}>
+                <a>Save</a>
+              </Popconfirm>
+          ) : null,
     },
     {
       title: 'delete',
       dataIndex: 'operation',
       render: (_, record: { key: React.Key }) =>
-        dataSource.length >= 1 ? (
-          <Popconfirm
-            title="Sure to delete?"
-            onConfirm={() => handleDelete(record.key)}
-          >
-            <a>Delete</a>
-          </Popconfirm>
-        ) : null,
+          dataSource.length >= 1 ? (
+              <Popconfirm
+                  title="Sure to delete?"
+                  onConfirm={() => handleDelete(record.key)}
+              >
+                <a>Delete</a>
+              </Popconfirm>
+          ) : null,
     },
   ];
   const defaultColumns = columns.map((col) => {
@@ -168,7 +180,7 @@ export const Dashboard: FC<DashboardProps> = () => {
     }
     return {
       ...col,
-      onCell: (record: DataType) => ({
+      onCell: (record: IProducts) => ({
         record,
         editable: col.editable,
         dataIndex: col.dataIndex,
@@ -178,19 +190,20 @@ export const Dashboard: FC<DashboardProps> = () => {
     };
   });
   return (
-    <div>
-      {/*<input onChange={}></input>*/}
-      <Button onClick={handleAdd} type="primary" style={{ marginBottom: 16 }}>
-        Add new user
-      </Button>
-      <Table
-        components={components}
-        rowClassName={() => 'editable-row'}
-        bordered
-        size={'middle'}
-        dataSource={dataSource}
-        columns={defaultColumns as ColumnTypes}
-      />
-    </div>
+      <div>
+        {/*<input onChange={}></input>*/}
+        <Button onClick={handleAdd} type="primary" style={{ marginBottom: 16 }}>
+          Add new product
+        </Button>
+        <Table
+            components={components}
+            rowClassName={() => 'editable-row'}
+            bordered
+            size={'middle'}
+            dataSource={dataSource}
+            columns={defaultColumns as ColumnTypes}
+        />
+      </div>
   );
-};
+});
+
