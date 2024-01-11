@@ -117,7 +117,7 @@ export const Dashboard: FC<DashboardProps> = observer(():JSX.Element => {
       key: 'id',
       width: '20%',
       editable: true,
-      sorter: (a, b) => a.name.length - b.username.length,
+      sorter: (a, b) => a.name.length - b.name.length,
       render: (text) => <Typography.Text copyable>{text}</Typography.Text>,
     },
     {
@@ -194,7 +194,9 @@ export const Dashboard: FC<DashboardProps> = observer(():JSX.Element => {
   return (
       <div>
         {/*<input onChange={}></input>*/}
-        <Button onClick={handleAdd} type="primary" style={{ marginBottom: 16 }}>
+        <Button
+            onClick={handleAdd} type="primary"
+            style={{ marginBottom: 16 }}>
           Add new product
         </Button>
         <Table
