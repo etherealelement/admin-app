@@ -16,7 +16,7 @@ class Product {
         try {
             const response = await fetch("https://test-api.itrum.ru/api/products/");
             const data = await response.json();
-            runInAction(() =>  this.products = data.results);
+            runInAction(() =>  this.products = data.results)
         } catch (e) {
             console.log(e);
         }

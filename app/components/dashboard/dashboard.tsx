@@ -21,46 +21,39 @@ import shortid from "shortid";
 import { IProduct } from '@/app/services/interfaces/product.interface';
 
 
-
 export const Dashboard: FC<DashboardProps> = observer(():JSX.Element => {
-  // rtk hooks
-  const [addUser, { isError }] = useAddUserMutation();
-  const [deleteProduct] = useDeleteUserMutation();
-  const [newProduct, setNewProduct] = useState<IProducts[]>([]);
+  const [productDataSource, setProductDataSource] = useState<IProducts[]>();
   const id = shortid.generate();
 
   useEffect(() => {
     product.fetchProducts();
-  }, [])
-
-
-  const dataSource = product.products.map( (item) => {
-    return {id: item.id,
-      name: item.name, 
-      key: item.id, 
-      name_from_1c: item.name_from_1c,
-      price: item.price,
-      volume: item.volume,
-      is_ready: item.is_ready,
-      is_retail_allowed: item.is_retail_allowed,
-      description: item.description,
-      images: item.description,
-      created_at: item.created_at,
-      updated_at: item.updated_at,
-      brand: {
-        id: item.brand.id,
-        name: item.brand.name,
-        icon: item.brand.icon,
-        margin: item.brand.margin
+    setProductDataSource(product.products.map( (item):IProducts => {
+      return {id: item.id,
+        name: item.name,
+        key: item.id,
+        name_from_1c: item.name_from_1c,
+        price: item.price,
+        volume: item.volume,
+        is_ready: item.is_ready,
+        is_retail_allowed: item.is_retail_allowed,
+        description: item.description,
+        images: item.description,
+        created_at: item.created_at,
+        updated_at: item.updated_at,
+        brand: {
+          id: item.brand.id,
+          name: item.brand.name,
+          icon: item.brand.icon,
+          margin: item.brand.margin
+        }
       }
-    }
-})
+    }))
+  }, [product.products])
   
-  const handleAddUser = async () => {
-    if (newProduct) {
-      await addUser(newUserData).unwrap();
-    }
-  };
+  const handleAddUser = () => {
+
+  }
+
 
   const handleDelete = (id: React.Key) => {
     const newData = dataSource.filter((item) => item.id !== id);
@@ -75,8 +68,7 @@ export const Dashboard: FC<DashboardProps> = observer(():JSX.Element => {
       ...item,
       ...row,
     });
-    setNewUserData(item);
-    setProducts(newData);
+    setProductDataSource(newData);
   };
 
 
@@ -86,12 +78,12 @@ export const Dashboard: FC<DashboardProps> = observer(():JSX.Element => {
       cell: EditableCell,
     },
   };
-
   
   const handleAdd = () => {
-    const newData: IProducts= {
-      name: "", 
-      id: id, 
+    const newData: IProducts = {
+      id: id,
+      key: id,
+      name: "",
       name_from_1c: "",
       price: "",
       description: "",
@@ -105,7 +97,7 @@ export const Dashboard: FC<DashboardProps> = observer(():JSX.Element => {
         margin: 0,
       }
     };
-    setNewProduct([...dataSource, newData]);
+    setProductDataSource([...productDataSource, newData]);
   };
   const columns: (ColumnTypes[number] & {
     editable?: boolean;
@@ -117,7 +109,7 @@ export const Dashboard: FC<DashboardProps> = observer(():JSX.Element => {
       key: 'id',
       width: '20%',
       editable: true,
-      sorter: (a, b) => a.name.length - b.username.length,
+      sorter: (a, b) => a.name.length - b.name.length,
       render: (text) => <Typography.Text copyable>{text}</Typography.Text>,
     },
     {
@@ -156,7 +148,7 @@ export const Dashboard: FC<DashboardProps> = observer(():JSX.Element => {
       title: 'save',
       dataIndex: 'operation',
       render: (_, record: { key: React.Key }) =>
-          dataSource.length >= 1 ? (
+          productDataSource.length >= 1 ? (
               <Popconfirm title="Sure to save?" onConfirm={handleAddUser}>
                 <a>Save</a>
               </Popconfirm>
@@ -166,7 +158,7 @@ export const Dashboard: FC<DashboardProps> = observer(():JSX.Element => {
       title: 'delete',
       dataIndex: 'operation',
       render: (_, record: { key: React.Key }) =>
-          dataSource.length >= 1 ? (
+      productDataSource.length >= 1 ? (
               <Popconfirm
                   title="Sure to delete?"
                   onConfirm={() => handleDelete(record.key)}
@@ -194,7 +186,9 @@ export const Dashboard: FC<DashboardProps> = observer(():JSX.Element => {
   return (
       <div>
         {/*<input onChange={}></input>*/}
-        <Button onClick={handleAdd} type="primary" style={{ marginBottom: 16 }}>
+        <Button
+            onClick={handleAdd} type="primary"
+            style={{ marginBottom: 16 }}>
           Add new product
         </Button>
         <Table
@@ -202,7 +196,7 @@ export const Dashboard: FC<DashboardProps> = observer(():JSX.Element => {
             rowClassName={() => 'editable-row'}
             bordered
             size={'middle'}
-            dataSource={dataSource}
+            dataSource={productDataSource}
             columns={defaultColumns as ColumnTypes}
         />
       </div>
