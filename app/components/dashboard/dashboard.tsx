@@ -109,7 +109,7 @@ export const Dashboard: FC<DashboardProps> = observer(():JSX.Element => {
       key: 'id',
       width: '20%',
       editable: true,
-      sorter: (a, b) => a.name.length - b.name.length,
+      sorter: (a, b) => a.name.replace(/\D/g, "") - b.name.replace(/\D/g, ""),
       render: (text) => <Typography.Text copyable>{text}</Typography.Text>,
     },
     {
@@ -118,7 +118,7 @@ export const Dashboard: FC<DashboardProps> = observer(():JSX.Element => {
       key: '0',
       width: '20%',
       editable: true,
-      sorter: (a, b) => a.name.length - b.username.length,
+      sorter: (a, b) => a.brand.name - b.brand.name,
       render: (text) => <Typography.Text copyable>{text}</Typography.Text>,
     },
     {
@@ -126,7 +126,7 @@ export const Dashboard: FC<DashboardProps> = observer(():JSX.Element => {
       dataIndex: 'price',
       editable: true,
       key: 'id',
-      sorter: (a, b) => a.username.length - b.username.length,
+      sorter: (a, b) => a.price - b.price,
       render: (text) => <Typography.Text copyable>{text}</Typography.Text>,
     },
     {
@@ -134,14 +134,12 @@ export const Dashboard: FC<DashboardProps> = observer(():JSX.Element => {
       dataIndex: 'created_at',
       key: 'id',
       editable: true,
-      sorter: (a, b) => a.created.length - b.created.length,
     },
     {
       title: 'Updated at',
       dataIndex: "updated_at",
       editable: true,
       key: 'id',
-      sorter: (a, b) => a.updated.length - b.updated.length,
       render: (text) => <Typography.Text copyable>{text}</Typography.Text>,
     },
     {
