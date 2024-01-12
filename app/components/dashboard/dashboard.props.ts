@@ -14,7 +14,8 @@ export interface IResponseProducts {
 }
 
 export interface IProducts {
-    id: string
+    id: string;
+    key?: string;
     name: string
     name_from_1c: string
     price: string
