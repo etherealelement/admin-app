@@ -55,13 +55,14 @@ export const Dashboard: FC<DashboardProps> = observer(():JSX.Element => {
   }
 
 
-  const handleDelete = (id: React.Key) => {
-    const newData = dataSource.filter((item) => item.id !== id);
-    deleteProduct(id);
+  const handleDelete = (id: string) => {
+    const newData = productDataSource?.filter((item) => item.id !== id);
+    product.deleteProduct(id);
+    setProductDataSource(newData);
   };
 
   const handleSave = (row: IProducts[]) => {
-    const newData = [...dataSource];
+    const newData = [...productDataSource];
     const index = newData.findIndex((item) => row.id === item.id);
     const item = newData[index];
     newData.splice(index, 1, {
@@ -159,7 +160,7 @@ export const Dashboard: FC<DashboardProps> = observer(():JSX.Element => {
       productDataSource.length >= 1 ? (
               <Popconfirm
                   title="Sure to delete?"
-                  onConfirm={() => handleDelete(record.key)}
+                  onConfirm={() => handleDelete(record.key as string)}
               >
                 <a>Delete</a>
               </Popconfirm>

@@ -8,6 +8,7 @@ class Product {
     makeAutoObservable(this, {
         products: observable,
         fetchProducts: action,
+        
     })
   }
 
@@ -20,6 +21,16 @@ class Product {
         } catch (e) {
             console.log(e);
         }
+    }
+   }
+
+   async deleteProduct(id: string) {
+    try {
+      const response = await fetch(`https://test-api.itrum.ru/api/products/${id}/`)
+      const data = await response.json();
+      console.log(data);
+    }catch(e) {
+      console.log(e);
     }
    }
 }
