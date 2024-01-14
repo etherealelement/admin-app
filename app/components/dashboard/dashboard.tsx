@@ -64,9 +64,10 @@ export const Dashboard: FC<DashboardProps> = observer(():JSX.Element => {
       created_at: createdDate,
       updated_at: updatedDate,
     });
-    console.log(data)
+    console.log(newData)
     setProductDataSource(newData);
-
+    setCreatedDate("");
+    setUpdatedDate("");
   };
 
 
