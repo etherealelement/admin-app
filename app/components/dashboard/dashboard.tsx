@@ -1,28 +1,25 @@
 'use client';
 import { FC, useEffect, useState } from 'react';
 import React from 'react';
-import { Table, Typography, Popconfirm, Button } from 'antd';
+import {Table, Typography, Popconfirm, Button, DatePicker} from 'antd';
 import './dashboard.scss';
 import {
   ColumnTypes,
   DashboardProps,
     IProducts
 } from '@/app/components/dashboard/dashboard.props';
-import {
-  useDeleteUserMutation,
-} from '@/app/redux';
-import { useAddUserMutation } from '@/app/redux/store/register-api';
 import { EditableRow } from '@/app/components/dashboard/editable/editable-row';
 import { EditableCell } from '@/app/components/dashboard/editable/editable-cell';
-import { InputSearchValueContext } from '@/app/pages/main-page/context/main-context';
 import {observer} from "mobx-react-lite";
 import product from "../../services/product.service";
 import shortid from "shortid";
-import { IProduct } from '@/app/services/interfaces/product.interface';
+
 
 
 export const Dashboard: FC<DashboardProps> = observer(():JSX.Element => {
-  const [productDataSource, setProductDataSource] = useState<IProducts[]>();
+  const [productDataSource, setProductDataSource] = useState<IProducts[]>([]);
+  const [createdDate, setCreatedDate] = useState("");
+  const [updatedDate, setUpdatedDate] = useState("");
   const id = shortid.generate();
 
   useEffect(() => {
@@ -50,10 +47,6 @@ export const Dashboard: FC<DashboardProps> = observer(():JSX.Element => {
     }))
   }, [product.products])
   
-  const handleAddUser = () => {
-
-  }
-
 
   const handleDelete = (id: string) => {
     const newData = productDataSource?.filter((item) => item.id !== id);
@@ -61,15 +54,19 @@ export const Dashboard: FC<DashboardProps> = observer(():JSX.Element => {
     setProductDataSource(newData);
   };
 
-  const handleSave = (row: IProducts[]) => {
+  const handleSave = (data: IProducts) => {
     const newData = [...productDataSource];
-    const index = newData.findIndex((item) => row.id === item.id);
+    const index = newData.findIndex((item) => data.id === item.id);
     const item = newData[index];
     newData.splice(index, 1, {
       ...item,
-      ...row,
+      ...data,
+      created_at: createdDate,
+      updated_at: updatedDate,
     });
+    console.log(data)
     setProductDataSource(newData);
+
   };
 
 
@@ -100,6 +97,17 @@ export const Dashboard: FC<DashboardProps> = observer(():JSX.Element => {
     };
     setProductDataSource([...productDataSource, newData]);
   };
+
+  const handleCreatedDateChange = (date, dateString) => {
+      setCreatedDate(dateString);
+
+  }
+
+  const handleUpdatedDateChange = (date, dateString) => {
+    setUpdatedDate(dateString)
+  }
+
+
   const columns: (ColumnTypes[number] & {
     editable?: boolean;
     dataIndex: any;
@@ -134,21 +142,25 @@ export const Dashboard: FC<DashboardProps> = observer(():JSX.Element => {
       title: 'Created at',
       dataIndex: 'created_at',
       key: 'id',
-      editable: true,
+      editable: false,
+      render: (text,record) => record.created_at ? record.created_at : <DatePicker onChange={handleCreatedDateChange}></DatePicker>
     },
     {
       title: 'Updated at',
       dataIndex: "updated_at",
-      editable: true,
+      editable: false,
       key: 'id',
-      render: (text) => <Typography.Text copyable>{text}</Typography.Text>,
+      render: (text,record) => record.created_at ? record.created_at : <DatePicker onChange={handleUpdatedDateChange}></DatePicker>
     },
     {
       title: 'save',
       dataIndex: 'operation',
       render: (_, record: { key: React.Key }) =>
           productDataSource.length >= 1 ? (
-              <Popconfirm title="Sure to save?" onConfirm={handleAddUser}>
+              <Popconfirm title="Sure to save?" onConfirm={() => {
+                handleSave(record)
+               product.addProduct(record)
+              }}>
                 <a>Save</a>
               </Popconfirm>
           ) : null,

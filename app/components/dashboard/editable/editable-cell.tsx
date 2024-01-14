@@ -30,9 +30,8 @@ export const EditableCell: React.FC<EditableCellProps> = ({
     const save = async () => {
         try {
             const values = await form.validateFields();
-
-            toggleEdit();
             handleSave({...record, ...values});
+            toggleEdit();
         } catch (errInfo) {
             console.log('Save failed:', errInfo);
         }
