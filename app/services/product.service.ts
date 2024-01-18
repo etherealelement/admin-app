@@ -43,7 +43,7 @@ class Product {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                'Authorization': 'Bearer ecd686d984219dc8ef50f6ea8dc41793228b7f6c'
+                'X-CSRFToken': 'ecd686d984219dc8ef50f6ea8dc41793228b7f6c'
             }
         })
         console.log(res);

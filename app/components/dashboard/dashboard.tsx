@@ -99,12 +99,12 @@ export const Dashboard: FC<DashboardProps> = observer(():JSX.Element => {
     setProductDataSource([...productDataSource, newData]);
   };
 
-  const handleCreatedDateChange = (date, dateString) => {
+  const handleCreatedDateChange = (date: any, dateString: string) => {
       setCreatedDate(dateString);
 
   }
 
-  const handleUpdatedDateChange = (date, dateString) => {
+  const handleUpdatedDateChange = (date: any, dateString: string) => {
     setUpdatedDate(dateString)
   }
 
