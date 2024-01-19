@@ -203,6 +203,11 @@ export const Dashboard: FC<DashboardProps> = observer(():JSX.Element => {
             style={{ marginBottom: 16 }}>
           Add new product
         </Button>
+        <Button
+            type="primary"
+            style={{ marginBottom: 16,marginLeft: 10 }}>
+          Show users
+        </Button>
         <Table
             components={components}
             rowClassName={() => 'editable-row'}
