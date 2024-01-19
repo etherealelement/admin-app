@@ -13,13 +13,14 @@ import { EditableCell } from '@/app/components/dashboard/editable/editable-cell'
 import {observer} from "mobx-react-lite";
 import product from "../../services/product.service";
 import shortid from "shortid";
-
+import styles from "./dashboard.module.scss";
 
 
 export const Dashboard: FC<DashboardProps> = observer(():JSX.Element => {
   const [productDataSource, setProductDataSource] = useState<IProducts[]>([]);
   const [createdDate, setCreatedDate] = useState("");
   const [updatedDate, setUpdatedDate] = useState("");
+  const [isProducts, setIsProducts] = useState<boolean>(true);
   const id = shortid.generate();
 
   useEffect(() => {
@@ -197,16 +198,19 @@ export const Dashboard: FC<DashboardProps> = observer(():JSX.Element => {
   });
   return (
       <div>
-        {/*<input onChange={}></input>*/}
+        <div className={styles.block}>
+          <Button type='primary' shape="round" style={{marginRight: 16}} onClick={() => setIsProducts(true)}>
+            show products
+          </Button>
+          <Button type='primary' shape="round" onClick={() => setIsProducts(false)}>
+            show users
+          </Button>
+        </div>
+        {isProducts ? <div className={styles.blockProducts}>
         <Button
             onClick={handleAdd} type="primary"
             style={{ marginBottom: 16 }}>
           Add new product
-        </Button>
-        <Button
-            type="primary"
-            style={{ marginBottom: 16,marginLeft: 10 }}>
-          Show users
         </Button>
         <Table
             components={components}
@@ -216,6 +220,21 @@ export const Dashboard: FC<DashboardProps> = observer(():JSX.Element => {
             dataSource={productDataSource}
             columns={defaultColumns as ColumnTypes}
         />
+      </div> : <div className={styles.blockUsers}>
+      <Button
+            onClick={handleAdd} type="primary"
+            style={{ marginBottom: 16 }}>
+          Add new users
+        </Button>
+        <Table
+            components={components}
+            rowClassName={() => 'editable-row'}
+            bordered
+            size={'middle'}
+            dataSource={productDataSource}
+            columns={defaultColumns as ColumnTypes}
+        />
+        </div>}
       </div>
   );
 });
