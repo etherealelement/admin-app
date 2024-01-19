@@ -1,5 +1,6 @@
 import {action, makeAutoObservable, observable, runInAction} from "mobx";
 import {IProduct} from "@/app/services/interfaces/product.interface";
+import {IProducts} from "@/app/components/dashboard/dashboard.props";
 
 class Product {
   products: IProduct[] = [];
@@ -8,7 +9,8 @@ class Product {
     makeAutoObservable(this, {
         products: observable,
         fetchProducts: action,
-        
+        deleteProduct: action,
+        addProduct: action,
     })
   }
 
@@ -33,6 +35,24 @@ class Product {
       console.log(e);
     }
    }
+
+   async addProduct(data: IProducts) {
+    try {
+        const res = await fetch("https://test-api.itrum.ru/api/products/", {
+            body: JSON.stringify(data),
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                'X-CSRFToken': 'ecd686d984219dc8ef50f6ea8dc41793228b7f6c'
+            }
+        })
+        console.log(res);
+    } catch (e) {
+        console.log(e)
+    }
+    }
+
+
 }
 
 // eslint-disable-next-line import/no-anonymous-default-export
