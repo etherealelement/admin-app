@@ -14,6 +14,7 @@ import {observer} from "mobx-react-lite";
 import product from "../../services/product.service";
 import shortid from "shortid";
 import styles from "./dashboard.module.scss";
+import { DashboardUsers } from './dashboard-users/dashboard-users';
 
 
 export const Dashboard: FC<DashboardProps> = observer(():JSX.Element => {
@@ -221,19 +222,7 @@ export const Dashboard: FC<DashboardProps> = observer(():JSX.Element => {
             columns={defaultColumns as ColumnTypes}
         />
       </div> : <div className={styles.blockUsers}>
-      <Button
-            onClick={handleAdd} type="primary"
-            style={{ marginBottom: 16 }}>
-          Add new users
-        </Button>
-        <Table
-            components={components}
-            rowClassName={() => 'editable-row'}
-            bordered
-            size={'middle'}
-            dataSource={productDataSource}
-            columns={defaultColumns as ColumnTypes}
-        />
+      <DashboardUsers></DashboardUsers>
         </div>}
       </div>
   );

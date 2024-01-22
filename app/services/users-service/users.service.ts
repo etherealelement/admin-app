@@ -14,7 +14,12 @@ class Users {
   async fetchUsers() {
     if(this.users.length === 0) {
       try {
-        const response = await fetch("https://test-api.itrum.ru/api/auth/users/");
+        const response = await fetch("https://test-api.itrum.ru/api/auth/users/", {
+          headers: {
+            'accept': 'application/json',
+            'Authorization': 'Token ecd686d984219dc8ef50f6ea8dc41793228b7f6c',
+          }
+        });
         const data = await response.json();
         runInAction(() => this.users = data.results)
       } catch(e) {
