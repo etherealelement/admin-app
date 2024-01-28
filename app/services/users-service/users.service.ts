@@ -1,16 +1,17 @@
 import {IUser} from "@/app/services/users-service/user.interface";
 import { createStore} from "effector";
-import {createQuery} from "@farfetched/core";
+import {createMutation, createQuery} from "@farfetched/core";
 
 function createUsersDashboardApi(initial: IUser[]) {
   // stores
-  const $users = createStore<IUser[]>(initial)
+  const $users = createStore<IUser[]>(initial);
+  const $url = createStore<string>('https://test-api.itrum.ru/api/auth/users/')
   // events
 
   // requests
   const fetchUsersQuery = createQuery({
     handler: async () => {
-      const response = await fetch('https://test-api.itrum.ru/api/auth/users/', {
+      const response = await fetch($url.defaultState, {
           headers: {
             "content-type": "application/json",
             'Authorization': 'Token ecd686d984219dc8ef50f6ea8dc41793228b7f6c',
@@ -19,8 +20,23 @@ function createUsersDashboardApi(initial: IUser[]) {
       return response.json();
     }
   })
+  fetchUsersQuery.start();
+  //mutations
 
-  fetchUsersQuery.start()
+  const createAddUserMutation = createMutation({
+   handler: async (user: IUser) => {
+    const response = await fetch($url.defaultState,{
+      method: "POST",
+      body: JSON.stringify(user),
+      headers: {
+        "content-type": "application/json",
+        'Authorization': 'Token ecd686d984219dc8ef50f6ea8dc41793228b7f6c',
+      }
+    })
+   }
+  })
+
+
   // effects
 
   // samples
@@ -28,6 +44,7 @@ function createUsersDashboardApi(initial: IUser[]) {
   return {
     fetchUsersQuery,
     $users,
+    createAddUserMutation
   }
 
 }

@@ -4,17 +4,19 @@ import { IUser } from './dashboard-users.props';
 import shortid from "shortid";
 import { EditableRow } from '@/app/components/dashboard/editable/editable-row';
 import { EditableCell } from '@/app/components/dashboard/editable/editable-cell';
-import {Button, Popconfirm, Spin, Table, Typography} from 'antd';
+import {Button, Form, Input, Popconfirm, Spin, Table, Typography} from 'antd';
 import { ColumnTypes } from '../dashboard.props';
 import {useUnit} from "effector-react";
 import {usersDashboardApi} from "@/app/services/users-service/users.service";
 import {createQuery} from "@farfetched/core";
+import {isValidEmail} from "@/app/helpers/functions/isValidRegex";
 
 
 export const DashboardUsers: FC = (): JSX.Element => {
   const [usersDataSource, setUsersDataSource] = useState<IUser[]>([]);
   const id = shortid.generate();
-  const {data: users, pending} = useUnit(usersDashboardApi.fetchUsersQuery)
+  const {data: users, pending} = useUnit(usersDashboardApi.fetchUsersQuery);
+  const {start} = useUnit(usersDashboardApi.createAddUserMutation);
 
   useEffect(() => {
     setUsersDataSource(users.results.map( (item) => {
@@ -26,10 +28,18 @@ export const DashboardUsers: FC = (): JSX.Element => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [users]);
 
-  console.log(usersDataSource)
+  console.log(users.results);
 
   const handleAdd = () => {
-
+    const newData:IUser = {
+      id: id,
+      key: id,
+      password: id,
+      username: "",
+      email: "",
+      phone: "",
+    }
+    setUsersDataSource([...usersDataSource, newData])
   }
 
   const handleDelete = (id: string) => {
@@ -38,14 +48,14 @@ export const DashboardUsers: FC = (): JSX.Element => {
   };
 
   const handleSave = (data: IUser) => {
-    const newData = [...usersDataSource];
+    const newData: IUser[] = [...usersDataSource];
     const index = newData.findIndex((item) => data.id === item.id);
     const item = newData[index];
     newData.splice(index, 1, {
       ...item,
       ...data,
     });
-    console.log(newData)
+    start(data);
     setUsersDataSource(newData);
   };
 
@@ -77,7 +87,7 @@ export const DashboardUsers: FC = (): JSX.Element => {
       width: '20%',
       editable: true,
       sorter: (a, b) => a.email - b.email,
-      render: (text) => <Typography.Text copyable>{text}</Typography.Text>,
+      render: (text,record) => <Typography.Text copyable>{text}</Typography.Text>
     },
     {
       title: 'Phone',
@@ -90,11 +100,11 @@ export const DashboardUsers: FC = (): JSX.Element => {
     {
       title: 'save',
       dataIndex: 'operation',
+      width: "5%",
       render: (_, record: { key: React.Key }) =>
           usersDataSource.length >= 1 ? (
               <Popconfirm title="Sure to save?" onConfirm={() => {
                 handleSave(record)
-              //  users.addProduct(record)
               }}>
                 <a>Save</a>
               </Popconfirm>
@@ -103,6 +113,7 @@ export const DashboardUsers: FC = (): JSX.Element => {
     {
       title: 'delete',
       dataIndex: 'operation',
+      width: "5%",
       render: (_, record: { key: React.Key }) =>
       usersDataSource.length >= 1 ? (
               <Popconfirm
