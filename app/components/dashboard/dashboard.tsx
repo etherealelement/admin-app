@@ -10,49 +10,33 @@ import {
 } from '@/app/components/dashboard/dashboard.props';
 import { EditableRow } from '@/app/components/dashboard/editable/editable-row';
 import { EditableCell } from '@/app/components/dashboard/editable/editable-cell';
-import {observer} from "mobx-react-lite";
-import product from "../../services/product.service";
 import shortid from "shortid";
 import styles from "./dashboard.module.scss";
 import { DashboardUsers } from './dashboard-users/dashboard-users';
+import {useUnit} from "effector-react/effector-react.umd";
+import {productDashboardData} from "@/app/services/product-service/products.service";
 
 
-export const Dashboard: FC<DashboardProps> = observer(():JSX.Element => {
+export const Dashboard: FC<DashboardProps> = ():JSX.Element => {
   const [productDataSource, setProductDataSource] = useState<IProducts[]>([]);
   const [createdDate, setCreatedDate] = useState("");
   const [updatedDate, setUpdatedDate] = useState("");
   const [isProducts, setIsProducts] = useState<boolean>(true);
+  const {data: products} = useUnit(productDashboardData.fetchProductsQuery);
   const id = shortid.generate();
 
   useEffect(() => {
-    product.fetchProducts();
-    setProductDataSource(product.products.map( (item):IProducts => {
-      return {id: item.id,
-        name: item.name,
+    setProductDataSource(products.results.map( (item):IProducts => {
+      return {
         key: item.id,
-        name_from_1c: item.name_from_1c,
-        price: item.price,
-        volume: item.volume,
-        is_ready: item.is_ready,
-        is_retail_allowed: item.is_retail_allowed,
-        description: item.description,
-        images: item.description,
-        created_at: item.created_at,
-        updated_at: item.updated_at,
-        brand: {
-          id: item.brand.id,
-          name: item.brand.name,
-          icon: item.brand.icon,
-          margin: item.brand.margin
+        ...item
         }
-      }
-    }))
-  }, [product.products])
+      }))
+    }, [products]);
   
 
   const handleDelete = (id: string) => {
     const newData = productDataSource?.filter((item) => item.id !== id);
-    product.deleteProduct(id);
     setProductDataSource(newData);
   };
 
@@ -226,5 +210,5 @@ export const Dashboard: FC<DashboardProps> = observer(():JSX.Element => {
         </div>}
       </div>
   );
-});
+};
 

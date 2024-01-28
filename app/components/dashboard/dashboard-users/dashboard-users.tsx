@@ -2,33 +2,29 @@ import { FC, useEffect, useState } from 'react';
 import styles from "./dashboard-users.module.scss";
 import { IUser } from './dashboard-users.props';
 import shortid from "shortid";
-import { observer } from 'mobx-react-lite';
-import users from "../../../services/users-service/users.service";
 import { EditableRow } from '@/app/components/dashboard/editable/editable-row';
 import { EditableCell } from '@/app/components/dashboard/editable/editable-cell';
-import { Button, DatePicker, Popconfirm, Table, Typography } from 'antd';
+import {Button, Popconfirm, Spin, Table, Typography} from 'antd';
 import { ColumnTypes } from '../dashboard.props';
+import {useUnit} from "effector-react";
+import {usersDashboardApi} from "@/app/services/users-service/users.service";
+import {createQuery} from "@farfetched/core";
 
 
-export const DashboardUsers: FC = observer((): JSX.Element => {
+export const DashboardUsers: FC = (): JSX.Element => {
   const [usersDataSource, setUsersDataSource] = useState<IUser[]>([]);
-  const [createdDate, setCreatedDate] = useState("");
-  const [updatedDate, setUpdatedDate] = useState("");
   const id = shortid.generate();
+  const {data: users, pending} = useUnit(usersDashboardApi.fetchUsersQuery)
 
   useEffect(() => {
-    users.fetchUsers();
-
-    setUsersDataSource(users.users.map( (item) => {
-      return {id: item.id,
+    setUsersDataSource(users.results.map( (item) => {
+      return {
         key: item.id,
-        username: item.username,
-        email: item.email,
-        phone: item.phone,
+        ...item,
       }
-    } ))
+    }))
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [users.users]);
+  }, [users]);
 
   console.log(usersDataSource)
 
@@ -38,7 +34,6 @@ export const DashboardUsers: FC = observer((): JSX.Element => {
 
   const handleDelete = (id: string) => {
     const newData = usersDataSource?.filter((item) => item.id !== id);
-    users.deleteProducts(id);
     setUsersDataSource(newData);
   };
 
@@ -52,8 +47,6 @@ export const DashboardUsers: FC = observer((): JSX.Element => {
     });
     console.log(newData)
     setUsersDataSource(newData);
-    setCreatedDate("");
-    setUpdatedDate("");
   };
 
   const components = {
@@ -74,7 +67,7 @@ export const DashboardUsers: FC = observer((): JSX.Element => {
       key: 'id',
       width: '20%',
       editable: true,
-      sorter: (a, b) => a.name.replace(/\D/g, "") - b.name.replace(/\D/g, ""),
+      sorter: (a, b) => a.username.replace(/\D/g, "") - b.username.replace(/\D/g, ""),
       render: (text) => <Typography.Text copyable>{text}</Typography.Text>,
     },
     {
@@ -83,7 +76,7 @@ export const DashboardUsers: FC = observer((): JSX.Element => {
       key: 'id',
       width: '20%',
       editable: true,
-      sorter: (a, b) => a.brand.name - b.brand.name,
+      sorter: (a, b) => a.email - b.email,
       render: (text) => <Typography.Text copyable>{text}</Typography.Text>,
     },
     {
@@ -91,7 +84,7 @@ export const DashboardUsers: FC = observer((): JSX.Element => {
       dataIndex: 'phone',
       editable: true,
       key: 'id',
-      sorter: (a, b) => a.price - b.price,
+      sorter: (a, b) => a.phone - b.phone,
       render: (text) => <Typography.Text copyable>{text}</Typography.Text>,
     },
     {
@@ -145,6 +138,7 @@ export const DashboardUsers: FC = observer((): JSX.Element => {
 
 
   return <div className={styles.dashboardUsers}>
+    {!users && <Spin>Loading...</Spin>}
     <Button
             onClick={handleAdd} type="primary"
             style={{ marginBottom: 16 }}>
@@ -159,4 +153,4 @@ export const DashboardUsers: FC = observer((): JSX.Element => {
             columns={defaultColumns as ColumnTypes}
         />
       </div> 
-});
+};
