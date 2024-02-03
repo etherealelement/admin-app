@@ -2,9 +2,6 @@ import React, {useContext, useEffect, useRef, useState} from "react";
 import {EditableCellProps} from "@/app/components/dashboard/dashboard.props";
 import {Form, Input, InputRef} from "antd";
 import {EditableContext} from "@/app/components/dashboard/context/dashboard-context";
-import {isValidEmail} from "@/app/helpers/functions/isValidRegex";
-import {InputMask} from "@react-input/mask";
-import {MaskedInput} from "antd-mask-input";
 export const EditableCell: React.FC<EditableCellProps> = ({
                                                               title,
                                                               editable,
@@ -87,9 +84,37 @@ export const EditableCell: React.FC<EditableCellProps> = ({
                     >
                         <Input ref={inputRef} onPressEnter={save} onBlur={save} />
                     </Form.Item>
-                ) : (
+                ): dataIndex === "price" ? (
+                    <Form.Item
+                        style={{ margin: 0 }}
+                        name={dataIndex}
+                        rules={[
+                            {
+                                required: true,
+                                message: "Поле обязательно для заполнения",
+                            },
+                        ]}
+                    >
+                        <Input ref={inputRef} onPressEnter={save} onBlur={save} />
+                    </Form.Item>
+                ) 
+                
+                
+                
+                : (
                     // Добавьте код для других полей с их собственной валидацией
+                    <Form.Item
+                    style={{ margin: 0 }}
+                    name={dataIndex}
+                    rules={[
+                        {
+                            required: true,
+                            message: "Поле обязательно для заполнения",
+                        },
+                    ]}
+                >
                     <Input ref={inputRef} onPressEnter={save} onBlur={save} />
+                </Form.Item>
                 )
             )
     :(

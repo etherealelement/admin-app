@@ -10,12 +10,11 @@ import {
 } from '@/app/components/dashboard/dashboard.props';
 import { EditableRow } from '@/app/components/dashboard/editable/editable-row';
 import { EditableCell } from '@/app/components/dashboard/editable/editable-cell';
-import shortid from "shortid";
 import styles from "./dashboard.module.scss";
 import { DashboardUsers } from './dashboard-users/dashboard-users';
 import {useUnit} from "effector-react/effector-react.umd";
 import {productDashboardData} from "@/app/services/product-service/products.service";
-
+import { v4 as uuidv4 } from 'uuid';
 
 export const Dashboard: FC<DashboardProps> = ():JSX.Element => {
   const [productDataSource, setProductDataSource] = useState<IProducts[]>([]);
@@ -23,7 +22,9 @@ export const Dashboard: FC<DashboardProps> = ():JSX.Element => {
   const [updatedDate, setUpdatedDate] = useState("");
   const [isProducts, setIsProducts] = useState<boolean>(true);
   const {data: products} = useUnit(productDashboardData.fetchProductsQuery);
-  const id = shortid.generate();
+  const {start} = useUnit(productDashboardData.createAddProductMutation);
+  const uuid = uuidv4();
+  const uuidBrand = uuidv4();
 
   useEffect(() => {
     setProductDataSource(products.results.map( (item):IProducts => {
@@ -42,18 +43,16 @@ export const Dashboard: FC<DashboardProps> = ():JSX.Element => {
 
   const handleSave = (data: IProducts) => {
     const newData = [...productDataSource];
-    const index = newData.findIndex((item) => data.id === item.id);
-    const item = newData[index];
-    newData.splice(index, 1, {
-      ...item,
-      ...data,
-      created_at: createdDate,
-      updated_at: updatedDate,
-    });
-    console.log(newData)
+    const index = newData.findIndex(item => data.id === item.id);
+
+    const updatedData = {
+        ...data,
+        created_at: createdDate,
+        updated_at: updatedDate,
+    };
+
+    newData.splice(index, 1, updatedData);
     setProductDataSource(newData);
-    setCreatedDate("");
-    setUpdatedDate("");
   };
 
 
@@ -65,33 +64,37 @@ export const Dashboard: FC<DashboardProps> = ():JSX.Element => {
   };
   
   const handleAdd = () => {
-    const newData: IProducts = {
-      id: id,
-      key: id,
-      name: "",
-      name_from_1c: "",
-      price: "",
-      description: "",
-      created_at: "",
-      updated_at: "",
-      images: [],
-      brand: {
-        id: "",
-        name: "",
-        icon: "",
-        margin: 0,
-      }
+    const newData: IProducts = {  
+        brand: uuid,
+        created_at: "",
+        description: "",
+        id: uuid,
+        key: uuid,
+        images: ["https://www.iguides.ru/upload/iblock/cb8/wyuyifqmanbllm5ys0901kiuiqtss3ww.png"],
+        is_ready: false,
+        is_retail_allowed: false,
+        price: "",
+        name: "", 
+        name_from_1c: "",
+        updated_at: "",
+        volume: null,
     };
-    setProductDataSource([...productDataSource, newData]);
+    setProductDataSource(e => [...e, newData]);
   };
+
+  console.log(productDataSource);
 
   const handleCreatedDateChange = (date: any, dateString: string) => {
       setCreatedDate(dateString);
+      const newData = [...productDataSource];
+      setProductDataSource(newData);
 
   }
 
   const handleUpdatedDateChange = (date: any, dateString: string) => {
-    setUpdatedDate(dateString)
+    setUpdatedDate(dateString);
+    const newData = [...productDataSource];
+    setProductDataSource(newData);
   }
 
 
@@ -109,20 +112,30 @@ export const Dashboard: FC<DashboardProps> = ():JSX.Element => {
       render: (text) => <Typography.Text copyable>{text}</Typography.Text>,
     },
     {
-      title: 'Brand Name',
-      dataIndex: ['brand','name'],
-      key: '0',
-      width: '20%',
+      title: 'Price',
+      dataIndex: 'price',
+      key: 'id',
+      width: '10%',
       editable: true,
-      sorter: (a, b) => a.brand.name - b.brand.name,
+      sorter: (a, b) => a.price - b.price,
       render: (text) => <Typography.Text copyable>{text}</Typography.Text>,
     },
     {
-      title: 'Price',
-      dataIndex: 'price',
-      editable: true,
+      title: 'Name 1C',
+      dataIndex: 'name_from_1c',
       key: 'id',
-      sorter: (a, b) => a.price - b.price,
+      width: '10%',
+      editable: true,
+      sorter: (a, b) => a.name_from_1c - b.name_from_1c,
+      render: (text) => <Typography.Text copyable>{text}</Typography.Text>,
+    },
+    {
+      title: 'Description',
+      dataIndex: 'description',
+      key: 'id',
+      width: '10%',
+      editable: true,
+      sorter: (a, b) => a.description - b.description,
       render: (text) => <Typography.Text copyable>{text}</Typography.Text>,
     },
     {
@@ -145,8 +158,8 @@ export const Dashboard: FC<DashboardProps> = ():JSX.Element => {
       render: (_, record: { key: React.Key }) =>
           productDataSource.length >= 1 ? (
               <Popconfirm title="Sure to save?" onConfirm={() => {
-                handleSave(record)
-               product.addProduct(record)
+                handleSave(record);
+                start(record);
               }}>
                 <a>Save</a>
               </Popconfirm>

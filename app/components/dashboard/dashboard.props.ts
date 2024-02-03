@@ -14,6 +14,12 @@ export interface IResponseProducts {
 }
 
 export interface IProducts {
+    brandName?: {
+        id: string;
+        name: string,
+        icon: string,
+        margin: number,
+    };
     id: string;
     key?: string;
     name: string
@@ -26,7 +32,7 @@ export interface IProducts {
     images?: any[]
     created_at: string
     updated_at: string
-    brand: IBrand
+    brand: string;
 }
 
 export interface IBrand {

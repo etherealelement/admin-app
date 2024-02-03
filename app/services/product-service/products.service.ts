@@ -1,6 +1,7 @@
 import {IProduct} from "@/app/services/product-service/product.interface";
 import {createStore} from "effector";
-import {createQuery} from "@farfetched/core";
+import {createMutation, createQuery} from "@farfetched/core";
+import { IProducts } from "@/app/components/dashboard/dashboard.props";
 
 function createProductsDashboardApi(initial: IProduct[]) {
     //stores
@@ -17,6 +18,23 @@ function createProductsDashboardApi(initial: IProduct[]) {
     })
     fetchProductsQuery.start();
 
+    // mutations;
+
+    const createAddProductMutation = createMutation({
+        handler:async (product: IProducts) => {
+            const response = await fetch($url.defaultState, {
+                method: "POST",
+                body: JSON.stringify(product),
+                headers: {
+                    'content-type': 'application/json',
+                    'Authorization': 'Token ecd686d984219dc8ef50f6ea8dc41793228b7f6c',
+                    'Accept': 'application/json'
+                }
+            })
+        }
+    })
+
+
     // effects
 
     // samples
@@ -25,6 +43,7 @@ function createProductsDashboardApi(initial: IProduct[]) {
         $url,
         $products,
         fetchProductsQuery,
+        createAddProductMutation,
     }
 }
 

@@ -18,6 +18,7 @@ export const DashboardUsers: FC = (): JSX.Element => {
   const {data: users, pending} = useUnit(usersDashboardApi.fetchUsersQuery);
   const {start} = useUnit(usersDashboardApi.createAddUserMutation);
 
+
   useEffect(() => {
     setUsersDataSource(users.results.map( (item) => {
       return {
@@ -27,8 +28,6 @@ export const DashboardUsers: FC = (): JSX.Element => {
     }))
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [users]);
-
-  console.log(users.results);
 
   const handleAdd = () => {
     const newData:IUser = {

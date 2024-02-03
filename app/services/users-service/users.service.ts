@@ -21,8 +21,8 @@ function createUsersDashboardApi(initial: IUser[]) {
     }
   })
   fetchUsersQuery.start();
-  //mutations
 
+  //mutations
   const createAddUserMutation = createMutation({
    handler: async (user: IUser) => {
     const response = await fetch($url.defaultState,{
@@ -36,6 +36,18 @@ function createUsersDashboardApi(initial: IUser[]) {
    }
   })
 
+  const createDeleteUserMutation = createMutation({
+    handler: async (id: string) => {
+      const response = await fetch($url.defaultState + id, {
+        method: "DELETE",
+        body: JSON.stringify("admin"),
+        headers: {
+          "content-type": "application/json",
+          'Authorization': 'Token ecd686d984219dc8ef50f6ea8dc41793228b7f6c'
+        }
+      })
+    }
+  })
 
   // effects
 
@@ -44,7 +56,8 @@ function createUsersDashboardApi(initial: IUser[]) {
   return {
     fetchUsersQuery,
     $users,
-    createAddUserMutation
+    createAddUserMutation,
+    createDeleteUserMutation,
   }
 
 }
