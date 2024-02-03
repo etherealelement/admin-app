@@ -72,7 +72,8 @@ export interface Item {
     key: string;
     name: string;
     age: string;
-    address: string;
+    email: string;
+    phone: string;
 }
 
 // EditableRowProps

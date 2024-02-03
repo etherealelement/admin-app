@@ -38,72 +38,39 @@ export const EditableCell: React.FC<EditableCellProps> = ({
 
     let childNode = children;
 
-
-
-    if (editable) {
-        childNode = editing ?(
-                dataIndex === "email" ? (
-                    <Form.Item
+    const nodeValue = (dataIndex: string) => {
+        switch (dataIndex) {
+            case "email":
+                return <Form.Item
+                    style={{ margin: 0 }}
+                    name={dataIndex}
+                    rules={[
+                        {
+                            type: "email",
+                            pattern:  /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                            required: true,
+                            message: "Неправильный формат адреса электронной почты",
+                        },
+                    ]}
+                >
+                    <Input ref={inputRef} onPressEnter={save} onBlur={save} />
+                </Form.Item>
+            case "phone" : 
+                    return <Form.Item
                         style={{ margin: 0 }}
                         name={dataIndex}
                         rules={[
-                            {
-                                type: "email",
-                                pattern:  /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
-                                required: true,
-                                message: "Неправильный формат адреса электронной почты",
-                            },
-                        ]}
-                    >
-                        <Input ref={inputRef} onPressEnter={save} onBlur={save} />
-                    </Form.Item>
-                ) : dataIndex === "phone" ? (
-                    <Form.Item
-                        style={{ margin: 0 }}
-                        name={dataIndex}
-                        rules={[
-                            {
-                                pattern: /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/,
-                                message: "Неправильный формат номера телефона",
-                                required: true,
-                            },
-                        ]}
-                    >
-                        <Input ref={inputRef} onPressEnter={save} onBlur={save} />
-                    </Form.Item>
-                ) : dataIndex === "name" ? (
-                    <Form.Item
-                        style={{ margin: 0 }}
-                        name={dataIndex}
-                        rules={[
-                            {
-                                required: true,
-                                message: "Поле обязательно для заполнения",
-                            },
-                        ]}
-                    >
-                        <Input ref={inputRef} onPressEnter={save} onBlur={save} />
-                    </Form.Item>
-                ): dataIndex === "price" ? (
-                    <Form.Item
-                        style={{ margin: 0 }}
-                        name={dataIndex}
-                        rules={[
-                            {
-                                required: true,
-                                message: "Поле обязательно для заполнения",
-                            },
-                        ]}
-                    >
-                        <Input ref={inputRef} onPressEnter={save} onBlur={save} />
-                    </Form.Item>
-                ) 
-                
-                
-                
-                : (
-                    // Добавьте код для других полей с их собственной валидацией
-                    <Form.Item
+                        {
+                            pattern: /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/,
+                            message: "Неправильный формат номера телефона",
+                            required: true,
+                        },
+                    ]}
+                >
+                    <Input ref={inputRef} onPressEnter={save} onBlur={save} />
+                </Form.Item>
+            case "name": 
+                    return   <Form.Item
                     style={{ margin: 0 }}
                     name={dataIndex}
                     rules={[
@@ -115,8 +82,40 @@ export const EditableCell: React.FC<EditableCellProps> = ({
                 >
                     <Input ref={inputRef} onPressEnter={save} onBlur={save} />
                 </Form.Item>
-                )
-            )
+            case "price": 
+                    return <Form.Item
+                    style={{ margin: 0 }}
+                    name={dataIndex}
+                    rules={[
+                        {
+                            required: true,
+                            message: "Поле обязательно для заполнения",
+                        },
+                    ]}
+                >
+                    <Input ref={inputRef} onPressEnter={save} onBlur={save} />
+                </Form.Item>
+            default: 
+            return   <Form.Item
+            style={{ margin: 0 }}
+            name={dataIndex}
+            rules={[
+                {
+                    required: true,
+                    message: "Поле обязательно для заполнения",
+                },
+            ]}
+        >
+            <Input ref={inputRef} onPressEnter={save} onBlur={save} />
+        </Form.Item>
+                
+        }
+    }
+
+
+
+    if (editable) {
+        childNode = editing ? nodeValue(dataIndex)
     :(
             <div className="editable-cell-value-wrap" style={{paddingRight: 24}} onClick={toggleEdit}>
                 {children}
