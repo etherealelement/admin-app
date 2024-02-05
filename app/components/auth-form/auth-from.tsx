@@ -6,8 +6,6 @@ import {Button} from '../ui/button/button';
 import {IForm, IFormProps} from './auth-from.props';
 import {FormProvider, SubmitHandler, useForm} from 'react-hook-form';
 import Link from "next/link";
-import { ResponseLoginApi } from '@/app/redux/interfaces/login-user';
-import { useLoginMutation } from '@/app/redux/store/login-api';
 import { IRegisterForm } from '../register-form/register-form.props';
 import { useRouter } from 'next/navigation';
 import { Spin } from 'antd';
@@ -32,29 +30,29 @@ export const AuthForm: FC<IFormProps> = ({
     mode: "onChange",
     })
 
-    const [CreateLoginMutation, result] = useLoginMutation<ResponseLoginApi>()
+    // const [CreateLoginMutation, result] = useLoginMutation<ResponseLoginApi>()
 
-    const addLoginUserData = async () => {
-        const fieldData = methods.getValues();
-        try {
-            await CreateLoginMutation(fieldData);
-        } catch (error) {
-            console.log(`Ошибка ${error}`);
+    // const addLoginUserData = async () => {
+    //     const fieldData = methods.getValues();
+    //     try {
+    //         await CreateLoginMutation(fieldData);
+    //     } catch (error) {
+    //         console.log(`Ошибка ${error}`);
             
-        }
-    }
+    //     }
+    // }
 
     const submit: SubmitHandler<IForm> = (data) => {
         methods.reset();
     }
 
-    const router = useRouter();
+    // const router = useRouter();
 
-    useEffect(()=>{
-        if (result.status === "fulfilled") {
-            router.push("/pages/main-page")
-        }
-    }, [result,router])
+    // useEffect(()=>{
+    //     if (result.status === "fulfilled") {
+    //         router.push("/pages/main-page")
+    //     }
+    // }, [result,router])
 
 
     return (
@@ -81,20 +79,21 @@ export const AuthForm: FC<IFormProps> = ({
         ></LoginFormInput>)} 
 
             <div className={styles.failContainer}>
-            {result.error?.data.password}
-            {result.error?.data.username}
+            {/* {result.error?.data.password}
+            {result.error?.data.username} */}
           </div>
         </div>
         <Button
           type={(methods.formState.isDirty && methods.formState.isValid && 'login') || 'disable'}
-          onClick={() => addLoginUserData()}
+          //onClick={() => addLoginUserData()}
         >
-          {!result.isLoading && buttonText}
+          {/* {!result.isLoading && buttonText}
           {result.isLoading && (
             <Spin
               indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />}
             ></Spin>
-          )}
+          )} */}
+          sdfsdf
         </Button>
         <div className={styles.policy}>
           <p className={styles.policyText}>{descriptionText}</p>
