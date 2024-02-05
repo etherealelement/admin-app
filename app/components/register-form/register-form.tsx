@@ -7,14 +7,14 @@ import {
   IRegisterFormProps,
 } from '@/app/components/register-form/register-form.props';
 import { SubmitHandler, useForm, FormProvider, useFormContext } from 'react-hook-form';
-import { useAddUserMutation } from '@/app/redux/store/register-api';
-import { ResponseRegisterApi } from '@/app/redux/interfaces/register-user';
 import { Spin } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { RegisterFormInput } from './register-form-input/register-form-input';
 import { formGroupInputs } from './config/config-form';
+import { RegisterApi } from '@/app/services/register-service/register.service';
+import { useUnit } from 'effector-react';
 
 export const RegisterForm: FC<IRegisterFormProps> = ({
   titleForm,
@@ -22,22 +22,31 @@ export const RegisterForm: FC<IRegisterFormProps> = ({
   buttonText,
   buttonTextGoogle,
   descriptionText,
-  descriptionLink,
+  descriptionLink, 
   className,
   ...props
 }: IRegisterFormProps) => {
-
+  const { start }  = useUnit(RegisterApi.createRegisterMutation);
+  const response = useUnit(RegisterApi.$response);
+  const pending = useUnit(RegisterApi.$responsePending);
+  const responseErrors = (res: any = response)  => {
+    const resErrors = []
+    if(!res.hasOwnProperty("id")) {
+      for (const key in res) {
+        resErrors.push(res[key]);
+      }
+    }
+    return resErrors;
+  }
  const methods = useForm<IRegisterForm>({
     defaultValues: {},
     mode: "onChange",
   })
 
-  const [CreateUseMutation, result] = useAddUserMutation<ResponseRegisterApi>();
-
   const addUserData = async () => {
     const fieldData = methods.getValues();
     try {
-      await CreateUseMutation(fieldData);
+      start(fieldData);
     } catch (error) {
       console.log(`Ошибка ${error}`);
     }
@@ -50,10 +59,10 @@ export const RegisterForm: FC<IRegisterFormProps> = ({
   const router = useRouter();
 
   useEffect(() => {
-    if (result.status === 'fulfilled') {
+    if (response.hasOwnProperty("id")) {
       router.push('/pages/main-page');
     }
-  }, [result, router]);
+  }, [response, router]);
 
 
 
@@ -82,20 +91,23 @@ export const RegisterForm: FC<IRegisterFormProps> = ({
 
 
           <div className={styles.failContainer}>
-            {result.error?.data.password}
-            {result.error?.data.username}
+            {responseErrors().map((item, index) => (
+              <p className={styles.failText} key={index}>
+                {item}
+              </p>
+            ))}
           </div>
         </div>
         <Button
           type={(methods.formState.isDirty && methods.formState.isValid && 'login') || 'disable'}
           onClick={() => addUserData()}
         >
-          {!result.isLoading && buttonText}
-          {result.isLoading && (
+          {pending && (
             <Spin
               indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />}
             ></Spin>
           )}
+          {buttonText}
         </Button>
         <div className={styles.policy}>
           <p className={styles.policyText}>{descriptionText}</p>

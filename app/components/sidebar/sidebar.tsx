@@ -3,13 +3,13 @@ import styles from './sidebar.module.scss';
 import { FilterLabel } from '../ui/filter-label/filter-label';
 import { SidebarSelect } from '../ui/sidebar-select/sidebar-select';
 import {SidebarInput} from "@/app/components/ui/sidebar-input/sidebar-input";
-import {useGetUsersQuery} from "@/app/redux";
+
 import Link from "next/link";
 import {IconLogo} from "@/app/components/ui/icons/icon-logo";
 
 export const Sidebar: FC = (): JSX.Element => {
 
-  const {data, isLoading} = useGetUsersQuery();
+  
 
 
   return (
@@ -55,7 +55,7 @@ export const Sidebar: FC = (): JSX.Element => {
             >
               Website
             </FilterLabel>
-            <SidebarSelect name="Choose website" websiteData={data}></SidebarSelect>
+            <SidebarSelect name="Choose website" websiteData={[]}></SidebarSelect>
           </li>
         </ul>
       </div>

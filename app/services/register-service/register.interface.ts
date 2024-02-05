@@ -20,3 +20,8 @@ export interface User {
   last_name: string;
   phone: string;
 }
+
+export type RegisterUser = {
+  message: string;
+  type: string;
+}
