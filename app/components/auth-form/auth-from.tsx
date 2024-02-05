@@ -12,6 +12,10 @@ import { Spin } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 import { formGroupLabelInputs } from './config/config-form';
 import { LoginFormInput } from './login-form-input/login-form-input';
+import { useUnit } from 'effector-react';
+import { AuthApi } from '@/app/services/auth-service/auth.service';
+import { IUser } from '../dashboard/dashboard-users/dashboard-users.props';
+import { padding } from '@mui/system';
 
 export const AuthForm: FC<IFormProps> = ({
                                              titleForm,
@@ -29,30 +33,45 @@ export const AuthForm: FC<IFormProps> = ({
     defaultValues: {},
     mode: "onChange",
     })
+    
+    const {start} = useUnit(AuthApi.loginMutation);
+    const pending = useUnit(AuthApi.$pending);
+    const response = useUnit(AuthApi.$response);
 
-    // const [CreateLoginMutation, result] = useLoginMutation<ResponseLoginApi>()
-
-    // const addLoginUserData = async () => {
-    //     const fieldData = methods.getValues();
-    //     try {
-    //         await CreateLoginMutation(fieldData);
-    //     } catch (error) {
-    //         console.log(`Ошибка ${error}`);
+    const addLoginUserData = async () => {
+        const fieldData = methods.getValues();
+        try {
+            start(fieldData);
+        } catch (error) {
+            console.log(`Ошибка ${error}`);
             
-    //     }
-    // }
+        }
+    }
+
+    const responseErrors = (res: any = response)  => {
+      const errors = [];
+      if (!res.hasOwnProperty("auth_token")) {
+        for (const key in res) {
+          errors.push(res[key]);
+        }
+      }
+      return errors;
+    }
+
+
+    console.log(response);
 
     const submit: SubmitHandler<IForm> = (data) => {
         methods.reset();
     }
 
-    // const router = useRouter();
+    const router = useRouter();
 
-    // useEffect(()=>{
-    //     if (result.status === "fulfilled") {
-    //         router.push("/pages/main-page")
-    //     }
-    // }, [result,router])
+    useEffect(()=>{
+        if (response.hasOwnProperty("auth_token")) {
+            router.push("/pages/main-page")
+        }
+    }, [response,router])
 
 
     return (
@@ -79,21 +98,19 @@ export const AuthForm: FC<IFormProps> = ({
         ></LoginFormInput>)} 
 
             <div className={styles.failContainer}>
-            {/* {result.error?.data.password}
-            {result.error?.data.username} */}
+            {responseErrors().map((item,index) => <p className={styles.failText} key={index}>{item}</p>)}
           </div>
         </div>
         <Button
           type={(methods.formState.isDirty && methods.formState.isValid && 'login') || 'disable'}
-          //onClick={() => addLoginUserData()}
+          onClick={() => addLoginUserData()}
         >
-          {/* {!result.isLoading && buttonText}
-          {result.isLoading && (
+          {pending ? 
             <Spin
               indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />}
-            ></Spin>
-          )} */}
-          sdfsdf
+            ></Spin> : buttonText
+          }
+          
         </Button>
         <div className={styles.policy}>
           <p className={styles.policyText}>{descriptionText}</p>
